@@ -7,10 +7,10 @@ class Oblig1 {
 
 
 class Tester {
-    Person ask = new Person("Ask", 10);
-    Person dana = new Person("Dana", 10);
-    Person tom = new Person("Tom", 10);
-    Person brynjulf = new Person("Brynjulf", 10);
+    Person ask = new Person("Ask", 3);
+    Person dana = new Person("Dana", 3);
+    Person tom = new Person("Tom", 3);
+    Person brynjulf = new Person("Brynjulf", 3);
 	
     public void kjor() {
         // Student 1: Ask
@@ -23,7 +23,6 @@ class Tester {
 
         // Student 2: Dana
         dana.blirKjentMed(ask);
-        dana.blirKjentMed(dana);
         dana.blirKjentMed(tom);
         dana.blirKjentMed(brynjulf);
         dana.blirUvennMed(brynjulf);
@@ -49,11 +48,13 @@ class Tester {
         tom.skrivUtAltOmMeg();
 
         // Bestevennen til Dana
+        /*
         Person[] danasVenner = dana.hentVenner();
         System.out.print("Danas venner (" + dana.antVenner() + "): ");
         for (Person p : danasVenner)
             System.out.print(p.hentNavn() + " ");
         System.out.println("\nDanas bestevenn: " + dana.hentBestevenn().hentNavn());
+        */
 	}
 }
 
