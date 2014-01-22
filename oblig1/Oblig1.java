@@ -55,7 +55,7 @@ class Tester {
             System.out.print(p.hentNavn() + " ");
         System.out.println("\nDanas bestevenn: " + dana.hentBestevenn().hentNavn());
         */
-	}
+    }
 }
 
 
