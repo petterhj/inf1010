@@ -1,7 +1,7 @@
 class Oblig1 {
     public static void main(String[] args) {
-		Tester test = new Tester();
-		test.kjor();
+        Tester test = new Tester();
+        test.kjor();
     }
 }
 
