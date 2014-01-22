@@ -1,73 +1,73 @@
 class Oblig1 {
     public static void main(String[] args) {
-		Testklasse test = new Testklasse();
-		test.kjorTest();
+		Tester test = new Tester();
+		test.kjor();
     }
 }
 
-class Testklasse {
-	public void kjorTest() {
-		// Studenter
-		Person p1 = new Person("Ask", 10);
-		Person p2 = new Person("Dana", 10);
-		Person p3 = new Person("Tom", 10);
-		Person p4 = new Person("Brynjulf", 10);
-		
-		
+
+class Tester {
+	Person ask = new Person("Ask", 10);
+	Person dana = new Person("Dana", 10);
+	Person tom = new Person("Tom", 10);
+	Person brynjulf = new Person("Brynjulf", 10);
+	
+	public void kjor() {
 		// Student 1: Ask
-		p1.blirKjentMed(p2);
-		p1.blirKjentMed(p3);
-		p1.blirKjentMed(p4);
-		p1.blirUvennMed(p2);
-		p1.blirUvennMed(p3);
-		p1.blirForelsketI(p4);
+		ask.blirKjentMed(dana);
+		ask.blirKjentMed(tom);
+		ask.blirKjentMed(brynjulf);
+		ask.blirUvennMed(dana);
+		ask.blirUvennMed(tom);
+		ask.blirForelsketI(brynjulf);
 		
 		// Student 2: Dana
-		p2.blirKjentMed(p1);
-		p2.blirKjentMed(p2);
-		p2.blirKjentMed(p3);
-		p2.blirKjentMed(p4);
-		p2.blirUvennMed(p4);
-		p2.blirForelsketI(p3);
+		dana.blirKjentMed(ask);
+		dana.blirKjentMed(dana);
+		dana.blirKjentMed(tom);
+		dana.blirKjentMed(brynjulf);
+		dana.blirUvennMed(brynjulf);
+		dana.blirForelsketI(tom);
 		
 		// Student 3: Tom
-		p3.blirKjentMed(p1);
-		p3.blirKjentMed(p2);
-		p3.blirKjentMed(p4);
-		p3.blirUvennMed(p1);
-		p3.blirUvennMed(p4);
-		p3.blirForelsketI(p2);
+		tom.blirKjentMed(ask);
+		tom.blirKjentMed(dana);
+		tom.blirKjentMed(brynjulf);
+		tom.blirUvennMed(ask);
+		tom.blirUvennMed(brynjulf);
+		tom.blirForelsketI(dana);
 		
 		// Student 4: Meg
-		p4.blirKjentMed(p1);
-		p4.blirKjentMed(p2);
-		p4.blirKjentMed(p3);
+		brynjulf.blirKjentMed(ask);
+		brynjulf.blirKjentMed(dana);
+		brynjulf.blirKjentMed(tom);
 		
 		// Oversikt
-		p4.skrivUtAltOmMeg();
-		p1.skrivUtAltOmMeg();
-		p2.skrivUtAltOmMeg();
-		p3.skrivUtAltOmMeg();
+		brynjulf.skrivUtAltOmMeg();
+		ask.skrivUtAltOmMeg();
+		dana.skrivUtAltOmMeg();
+		tom.skrivUtAltOmMeg();
 		
 		// Bestevennen til Dana
-		Person[] danasVenner = p2.hentVenner();
-		System.out.print("Danas venner (" + p2.antVenner() + "): ");
+		Person[] danasVenner = dana.hentVenner();
+		System.out.print("Danas venner (" + dana.antVenner() + "): ");
 		for (Person p : danasVenner)
 			System.out.print(p.hentNavn() + " ");
-		System.out.println("\nDanas bestevenn: " + p2.hentBestevenn().hentNavn());
+		System.out.println("\nDanas bestevenn: " + dana.hentBestevenn().hentNavn());
 	}
 }
 
+
 class Person {
-	// Variable
+	// Variables
     private String navn;
-    private Person[] kjenner;	// = bekjente
-    private Person[] likerikke; // = uvenner
+    private Person[] kjenner;
+    private Person[] likerikke;
     private Person forelsketi;
     private Person sammenmed;
     
 	
-	// Konstruktør
+	// Constructor
     Person(String n, int lengde) {
 		this.navn = n;
 		
@@ -75,24 +75,19 @@ class Person {
 		this.likerikke = new Person[lengde];
     }
 	
-	// Returner navn
+	// Return name
     public String hentNavn() {
         return this.navn;
     }
     
-	// Ret
+	// Check if acquainted
     public boolean erKjentMed(Person p) {
-        // Sann hvis Dana kjenner personen p peker på.
         return inArray(p, kjenner);
     }
     
+	// Add acquaintance
     public void blirKjentMed(Person p) {
-        // Dana blir kjent med p, bortsett fra hvis p peker
-        // på Dana (Dana kan ikke være kjent med seg selv).
-		
-		System.out.println(this.hentNavn() + " er seg selv? " + this.erSegSelv(p) + ", p = " + p.hentNavn());
-		
-		if (!this.erSegSelv(p))
+        if (!this.erSegSelv(p))
 			for (int i = 0; i < this.kjenner.length; i++)
 				if (this.kjenner[i] == null) {
 					this.kjenner[i] = p;
@@ -100,13 +95,13 @@ class Person {
 				}
     }
     
+	// Set love interest
     public void blirForelsketI(Person p) {
-        // Dana blir forelsket i p, bortsett fra hvis p peker på Dana
 		if (!this.erSegSelv(p)) this.forelsketi = p;
     }
     
+	// Set acquaintance as enemy
     public void blirUvennMed(Person p) {
-        // Dana blir uvenn med p, bortsett fra hvis p peker på Dana
 		if (!this.erSegSelv(p))
 			for (int i = 0; i < this.likerikke.length; i++)
 				if (this.likerikke[i] == null) {
@@ -115,18 +110,23 @@ class Person {
 				}
     }
     
+	// Check if friend
     public boolean erVennMed(Person p) {
-        // returnerer sann hvis Dana kjenner p og ikke er uvenner med p
         if (inArray(p, kjenner) && !inArray(p, likerikke)) return true;
         return false;
     }
-    /*
-    public void blirVennMed(Person p) {
-        // samme virkning som blirKjentMed(p), men hvis Dana ikke
-        // liker p dvs. (likerikke[i] == p) for en gitt i
-        // blir likerikke[i] satt til null.
-    }*/
     
+	// Set as friend (remove from enemies)
+    public void blirVennMed(Person p) {
+		for (int i = 0; i < this.likerikke.length; i++)
+			if (this.likerikke[i] == p) {
+				System.out.println("found as enemy");
+				this.likerikke[i] = null;
+				break;
+			}
+    }
+    
+	// Print friend list
     public void skrivUtVenner() {
 		System.out.println("Venner:");
 		
@@ -134,19 +134,14 @@ class Person {
 			System.out.println(" > " + p.hentNavn());
     }
     
+	// Return best friend
     public Person hentBestevenn() {
-        // returtypen skal du bestemme
-        // returnerer en peker til Danas bestevenn.
-        // En persons bestevenn er for enkelhets skyld definert til å være
-        // det objektet som pekes på av kjennerarrayens indeks 0.
 		Person[] venner = this.hentVenner();
 		return venner[0];
     }
     
+	// Return friends
     public Person[] hentVenner() {
-        // returnerer en array som peker på Danas venner
-        // Arrayen skal være akkurat så lang at lengden er lik antallet venner,
-        // og rekkefølgen skal være den samme som i kjenner-arrayen.
 		Person[] venner = new Person[this.antVenner()];
 		int vi = 0;
 		
@@ -157,6 +152,7 @@ class Person {
 		return venner;
     }
     
+	// Return friend count
     public int antVenner() {
 		int ant = 0;
 		
@@ -166,20 +162,21 @@ class Person {
 		return ant;
     }
     
-    // Disse metodene trenger du ikke lage selv, men gjør det gjerne for
-    // øvelsens skyld:
-    public void skrivUtKjenninger( ) {
-        for (Person p : this.kjenner )
+	// Print acquaintances
+    public void skrivUtKjenninger() {
+        for (Person p : this.kjenner)
             if (p != null) System.out.print(p.hentNavn( ) + " ");
         System.out.println("");
     }
     
+	// Print enemies
     public void skrivUtLikerIkke( ) {
         for (Person p : this.likerikke)
             if (p != null) System.out.print(p.hentNavn( ) + " ");
         System.out.println("");
     }
     
+	// Print profile
     public void skrivUtAltOmMeg ( ) {
 		System.out.print("--- " + this.navn + " ");
 		for (int i = 0; i < (50 - this.navn.length()); i++) System.out.print("-");
@@ -195,13 +192,14 @@ class Person {
 		System.out.println();
     }
     
-	// Hjelpemetoder
+	// Check if person in array
     private boolean inArray(Person n, Person[] h) {
-        for (Person p : h)
-            if (p == n) return true;
-        return false;
+		for (Person p : h)
+			if (p == n) return true;
+		return false;
     }
 	
+	// Check if self
 	private boolean erSegSelv(Person p) {
 		if (this == p) return true;
 		return false;
