@@ -20,9 +20,9 @@ class Tester {
 
     public void kjor() {
         // Student 1: Ask
-        ask.blirKjentMed(dana);
-        ask.blirKjentMed(tom);
         ask.blirKjentMed(brynjulf);
+        ask.blirKjentMed(tom);
+        ask.blirKjentMed(dana);
         ask.blirUvennMed(dana);
         ask.blirUvennMed(tom);
         ask.blirForelsketI(brynjulf);
@@ -35,9 +35,9 @@ class Tester {
         dana.blirForelsketI(tom);
 
         // Student 3: Tom
+        tom.blirKjentMed(brynjulf);
         tom.blirKjentMed(ask);
         tom.blirKjentMed(dana);
-        tom.blirKjentMed(brynjulf);
         tom.blirUvennMed(ask);
         tom.blirUvennMed(brynjulf);
         tom.blirForelsketI(dana);
@@ -89,7 +89,7 @@ class Person {
 
     // Check if acquainted
     public boolean erKjentMed(Person p) {
-        return inArray(p, kjenner);
+        return this.inArray(p, kjenner);
     }
 
     // Add acquaintance
@@ -127,7 +127,6 @@ class Person {
     public void blirVennMed(Person p) {
         for (int i = 0; i < this.likerikke.length; i++)
             if (this.likerikke[i] == p) {
-                System.out.println("found as enemy");
                 this.likerikke[i] = null;
                 break;
             }
@@ -185,18 +184,16 @@ class Person {
 
     // Print profile
     public void skrivUtAltOmMeg ( ) {
-        System.out.print("--- " + this.navn + " ");
-        for (int i = 0; i < (50 - this.navn.length()); i++) System.out.print("-");
-        System.out.print("\n > Kjenner:\t\t");
+        System.out.print(this.navn + " kjenner: ");
         skrivUtKjenninger();
 
-        if(forelsketi != null)
-            System.out.println(" > Er forelsket i\t" + this.forelsketi.hentNavn());
+        if (this.forelsketi != null)
+            System.out.println(this.navn + " er forelsket i " + this.forelsketi.hentNavn());
 
-        System.out.print(" > Liker ikke:\t\t");
-        skrivUtLikerIkke();
-
-        System.out.println();
+        if (this.likerikke[0] != null) {
+            System.out.print(this.navn + " liker ikke: ");
+            skrivUtLikerIkke();
+        }
     }
 
     // Check if person in array
