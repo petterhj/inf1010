@@ -13,11 +13,13 @@ class Oblig1 {
 
 // Class: Tester
 class Tester {
+    // Students
     Person ask = new Person("Ask", 3);
     Person dana = new Person("Dana", 3);
     Person tom = new Person("Tom", 3);
     Person brynjulf = new Person("Brynjulf", 3);
 
+    // Run tests
     public void kjor() {
         // Student 1: Ask
         ask.blirKjentMed(brynjulf);
