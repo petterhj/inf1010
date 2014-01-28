@@ -65,129 +65,131 @@ class Plate {
 class Person {
     // Variables
     private String navn;
-    private Person[] kjenner;
-    private Person[] likerikke;
-    private Person forelsketi;
-    private Person sammenmed;
+    private Person[] acquaintances;
+    private Person[] enemies;
+    private Person loveinterest;
+	
+	private Book[] books;
+	private Record[] records;
 
     // Constructor
     Person (String n, int lengde) {
-        this.navn = n;
-        this.kjenner = new Person[lengde];
-        this.likerikke = new Person[lengde];
+        this.name = n;
+        this.acquaintances = new Person[lengde];
+        this.enemies = new Person[lengde];
     }
 
     // Return name
-    public String hentNavn() {
-        return this.navn;
+    public String getName() {
+        return this.name;
     }
 
     // Check if acquainted
-    public boolean erKjentMed(Person p) {
-        return this.inArray(p, kjenner);
+    public boolean knows(Person p) {
+        return this.inArray(p, this.acquaintances);
     }
 
     // Add acquaintance
-    public void blirKjentMed(Person p) {
-        if (!this.erSegSelv(p))
-            for (int i = 0; i < this.kjenner.length; i++)
-                if (this.kjenner[i] == null) {
-                    this.kjenner[i] = p;
+    public void addAcquaintance(Person p) {
+        if (!this.isSelf(p))
+            for (int i = 0; i < this.acquaintances.length; i++)
+                if (this.acquaintances[i] == null) {
+                    this.acquaintances[i] = p;
                     break;
                 }
     }
 
     // Set love interest
-    public void blirForelsketI(Person p) {
-        if (!this.erSegSelv(p)) this.forelsketi = p;
+    public void fallsInLoveWith(Person p) {
+        if (!this.isSelf(p)) this.loveinterest = p;
     }
 
     // Set acquaintance as enemy
-    public void blirUvennMed(Person p) {
-        if (!this.erSegSelv(p))
-            for (int i = 0; i < this.likerikke.length; i++)
-                if (this.likerikke[i] == null) {
-                    this.likerikke[i] = p;
+    public void setEnemy(Person p) {
+        if (!this.isSelf(p))
+            for (int i = 0; i < this.enemies.length; i++)
+                if (this.enemies[i] == null) {
+                    this.enemies[i] = p;
                     break;
                 }
     }
 
     // Check if friend
-    public boolean erVennMed(Person p) {
-        if (inArray(p, kjenner) && !inArray(p, likerikke)) return true;
+    public boolean isFriend(Person p) {
+        if (inArray(p, this.acquaintances) && !inArray(p, this.enemies)) return true;
         return false;
     }
 
     // Set as friend (remove from enemies)
-    public void blirVennMed(Person p) {
-        for (int i = 0; i < this.likerikke.length; i++)
-            if (this.likerikke[i] == p) {
-                this.likerikke[i] = null;
+    public void setFriend(Person p) {
+        for (int i = 0; i < this.enemies.length; i++)
+            if (this.enemies[i] == p) {
+                this.enemies[i] = null;
                 break;
             }
     }
 
     // Print friend list
-    public void skrivUtVenner() {
+    public void printFriends() {
         System.out.println("Venner:");
 
-        for (Person p : this.hentVenner())
-            System.out.println(" > " + p.hentNavn());
+        for (Person p : this.getFriends())
+            System.out.println(" > " + p.getName());
     }
 
     // Return best friend
-    public Person hentBestevenn() {
-        Person[] venner = this.hentVenner();
-        return venner[0];
+    public Person getBestFriend() {
+        Person[] friends = this.getFriends();
+        return friends[0];
     }
 
     // Return friends
-    public Person[] hentVenner() {
-        Person[] venner = new Person[this.antVenner()];
+    public Person[] getFriends() {
+        Person[] friends = new Person[this.friendCount()];
         int vi = 0;
 
-        for (int i = 0; i < this.kjenner.length; i++)
-            if (this.erVennMed(this.kjenner[i]))
-                venner[vi++] = this.kjenner[i];
+        for (int i = 0; i < this.acquaintances.length; i++)
+            if (this.isFriend(this.acquaintances[i]))
+                friends[vi++] = this.acquaintances[i];
 
-        return venner;
+        return friends;
     }
 
     // Return friend count
-    public int antVenner() {
+    public int friendCount() {
         int ant = 0;
 
-        for (Person p : this.kjenner)
-            if (this.erVennMed(p)) ant++;
+        for (Person p : this.acquaintances)
+            if (this.isFriend(p)) ant++;
 
         return ant;
     }
 
     // Print acquaintances
-    public void skrivUtKjenninger() {
-        for (Person p : this.kjenner)
-            if (p != null) System.out.print(p.hentNavn( ) + " ");
+    public void printAcquaintances() {
+        for (Person p : this.acquaintances)
+            if (p != null) System.out.print(p.getName( ) + " ");
         System.out.println("");
     }
 
     // Print enemies
-    public void skrivUtLikerIkke( ) {
-        for (Person p : this.likerikke)
-            if (p != null) System.out.print(p.hentNavn( ) + " ");
+    public void printEnemies( ) {
+        for (Person p : this.enemies)
+            if (p != null) System.out.print(p.getName( ) + " ");
         System.out.println("");
     }
 
     // Print profile
-    public void skrivUtAltOmMeg ( ) {
-        System.out.print(this.navn + " kjenner: ");
-        skrivUtKjenninger();
+    public void printProfile ( ) {
+        System.out.print(this.name + " kjenner: ");
+        printAcquaintances();
 
-        if (this.forelsketi != null)
-            System.out.println(this.navn + " er forelsket i " + this.forelsketi.hentNavn());
+        if (this.loveinterest != null)
+            System.out.println(this.name + " er forelsket i " + this.loveinterest.getName());
 
-        if (this.likerikke[0] != null) {
-            System.out.print(this.navn + " liker ikke: ");
-            skrivUtLikerIkke();
+        if (this.enemies[0] != null) {
+            System.out.print(this.name + " liker ikke: ");
+            printEnemies();
         }
     }
 
@@ -199,7 +201,7 @@ class Person {
     }
 
     // Check if self
-    private boolean erSegSelv(Person p) {
+    private boolean isSelf(Person p) {
         if (this == p) return true;
         return false;
     }
