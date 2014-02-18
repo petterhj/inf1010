@@ -1,92 +1,41 @@
 // Class: Tester
 class Tester {
-    // Students
-    
-
-    // Run tests
-    public void kjor() {
-        //
-        Personer personer = new Personer();
-        
-        // Personer
-        Person ask = new Person("Ask");
-        Person dana = new Person("Dana");
-        Person tom = new Person("Tom");
-        Person brynjulf = new Person("Brynjulf");
-		Person uwe = new Person("Uwe");
-        
+	// Kjør test
+	public void kjor() {
+        // (1) Legg personer inn i lenkelista
+		Personer personer = new Personer();
 		
-		/*
-        Person[] prs = new Person[4];
-        prs[0] = ask;
-        prs[1] = dana;
-        prs[2] = null;
-        prs[3] = brynjulf;
-        
-        for (Person p : prs)
-            System.out.println(p);
-		*/
-
-        // Student 1: Ask
-        ask.blirKjentMed(brynjulf);
-        ask.blirKjentMed(tom);
-        ask.blirKjentMed(dana);
-        ask.blirUvennMed(dana);
-        ask.blirUvennMed(tom);
-        ask.blirSammenMed(brynjulf);
-
-        // Student 2: Dana
-        dana.blirKjentMed(ask);
-        dana.blirKjentMed(tom);
-        dana.blirKjentMed(brynjulf);
-        dana.blirUvennMed(brynjulf);
-        dana.blirForelsketI(tom);
-		dana.blirSammenMed(tom);
-
-        // Student 3: Tom
-        tom.blirKjentMed(brynjulf);
-        tom.blirKjentMed(ask);
-        tom.blirKjentMed(dana);
-        tom.blirUvennMed(ask);
-        tom.blirUvennMed(brynjulf);
-        //tom.blirSammenMed(uwe);
-
-        // Student 4: Brynjulf
-        brynjulf.blirKjentMed(ask);
-        brynjulf.blirKjentMed(dana);
-        brynjulf.blirKjentMed(tom);
+		ListeAvPersoner liste = new ListeAvPersoner();
 		
-        // Student 5: Uwe
-        //uwe.blirSammenMed(dana);
-		uwe.samlerAv("bok", 10);
+		Person p = personer.hentPerson();
 		
-
-        // Oversikt
-        System.out.println();
-        
-        brynjulf.skrivUtAltOmMeg();
-        System.out.println();
-        
-        ask.skrivUtAltOmMeg();
-        System.out.println();
-        
-        dana.skrivUtAltOmMeg();
-        System.out.println();
-        
-        tom.skrivUtAltOmMeg();
-        System.out.println();
+		while (p != null) {
+			liste.settInnSist(p);
+			p = personer.hentPerson();
+		}
 		
-        uwe.skrivUtAltOmMeg();
-        System.out.println();
-        
-        
-        
-        
-        
-        // while (personer.hentPerson() != null) {
-            // Person p = personer.hentPerson();
-            
-            // System.out.println(p.hentNavn());
-        // }
-    }
+		// (2) Gavedryss
+		GaveLager gavelager = new GaveLager();
+		
+		String[] personnavn = personer.hentPersonnavn();
+		
+		Gave gave = gavelager.hentGave();
+		
+		while (gave != null) {
+			// Sjekk om noen vil ha
+			for (String navn : personnavn) {
+				Person pers = liste.finnPerson(navn);
+				Gave retur = pers.gisGave(gave);
+				
+				if (retur == null)
+					break;
+			}
+			
+			// Hent ut ny gave
+			gave = gavelager.hentGave();
+		}
+		
+		// (3) Personoversikt
+		liste.skrivAlle();
+	}
 }

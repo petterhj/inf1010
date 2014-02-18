@@ -2,7 +2,7 @@
 public class Person {
     // Variabler
     private String navn;
-    
+	
     private Person[] kjenner;
     private Person[] likerikke;
     private Person forelsketi;
@@ -10,6 +10,8 @@ public class Person {
     
     private Gave[] mineGaver;
     private String samlerav;
+	
+    public Person neste;
 
     // Konstruktør
     Person (String n) {
@@ -25,18 +27,19 @@ public class Person {
 
     // Skriv ut profil
     public void skrivUtAltOmMeg ( ) {
-        System.out.print(" " + this.navn + "\n========================================");
+        System.out.print(" " + this.navn + "\n========================================\n");
         skrivUtKjenninger();
 		skrivUtLikerIkke();
+		skrivUtVenner();
 
         if (this.forelsketi != null)
-            System.out.print("\n > Forelsket i:\t" + this.forelsketi.hentNavn());
+            System.out.println("* Forelsket i: " + this.forelsketi.hentNavn());
             
         if (this.sammenmed != null)
-            System.out.print("\n > Sammen med:\t" + this.sammenmed.hentNavn());
+            System.out.println("* Sammen med: " + this.sammenmed.hentNavn());
         
 		if (this.samlerav != null && this.mineGaver != null) {
-			System.out.print("\n > Samler av:\t" + this.samlerav);
+			System.out.println("* Samler av: " + this.samlerav + " (" + this.mineGaver.length + " plasser)");
             this.skrivUtSamleobjekter();
 		}
         
@@ -52,27 +55,47 @@ public class Person {
         this.mineGaver = new Gave[ant];
     }
     
-    // Bestemmer hvorvidt gave beholdes
+    // Får gave
     public Gave gisGave(Gave gave) {
         // Sjekker om interessert i gave
-        if (this.harPlass() && this.erSamlerAv(gave.kategori())) {
-            // BEHOLDE?
+        if (this.erSamlerAv(gave.kategori()) && this.harPlass()) {
+            this.leggTilGave(gave);
 			return null;
         }
         // Gi gave videre
         else {
-            // Forsøk å gi videre til eventuell kjæreste
+            // (1) Forsøk å gi videre til eventuell kjæreste
+			if (this.sammenmed != null)
+				gave = this.sammenmed.gisRestGave(gave);
+				
+			// (2) Gi evt. videre til den man er forelsket i
+			if (gave != null && this.forelsketi != null)
+				gave = this.forelsketi.gisRestGave(gave);
+			
+			// (3) Gi evt. videre til venner
+			if (gave != null) {
+				for (Person p : this.hentVenner()) {
+					gave = p.gisRestGave(gave);
+					
+					if (gave == null)
+						break;
+				}
+					
+			}
+				
             return gave;
         }
     }
     
-    // Gi gave videre
-    public Gave giGaveVidere(Person p, Gave g) {
-        if ((p != null) && (g != null)) {
-            g = p.gisGave(g);
+    // Får viderelevert gave (gis ikke videre, returneres)
+    public Gave gisRestGave(Gave gave) {
+        // Sjekker om interessert i gave
+        if (this.erSamlerAv(gave.kategori()) && this.harPlass()) {
+            this.leggTilGave(gave);
+			return null;
         }
         
-        return g;
+        return gave;
     }
     
     // Sjekker om samler av gavetype
@@ -90,16 +113,21 @@ public class Person {
     
     // Legg til gave i samling
     public void leggTilGave(Gave gave) {
-        
+        for (int i = 0; i < this.mineGaver.length; i++)
+			if (this.mineGaver[i] == null) {
+				this.mineGaver[i] = gave;
+				break;
+			}
     }
     
     // Skriv ut samleobjekter
     public void skrivUtSamleobjekter() {
-        System.out.println("\n > Samling:\t");
-
+        System.out.println("* Samling:\t");
+		int i = 1;
         for (Gave g : this.mineGaver)
 			if (g != null)
-				System.out.println("  - " + g.gaveId());
+				System.out.println("  (" + i++ + ") " + g.kategori().substring(0, 1).toUpperCase() + g.kategori().substring(1) + ": " + g.gaveId());
+		System.out.println();
     }
     
     
@@ -204,26 +232,32 @@ public class Person {
 
     // Skriv ut liste over venner
     public void skrivUtKjenninger() {
-        System.out.print("\n > Bekjente:\t");
+        System.out.print("* Bekjente: ");
         
         for (Person p : this.kjenner)
             if (p != null) System.out.print(p.hentNavn( ) + ", ");
+			
+		System.out.println();
     }
 
     // Skriv ut liste over uvenner
     public void skrivUtLikerIkke() {
-        System.out.print("\n > Misliker:\t");
+        System.out.print("* Misliker: ");
         
         for (Person p : this.likerikke)
             if (p != null) System.out.print(p.hentNavn( ) + ", ");
+		
+		System.out.println();
     }
     
     // Skriv ut venneliste
     public void skrivUtVenner() {
-        System.out.println("\n > Venner:\t");
+        System.out.print("* Venner: ");
 
         for (Person p : this.hentVenner())
             System.out.print(p.hentNavn() + ", ");
+			
+		System.out.println();
     }
 
 
