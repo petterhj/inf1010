@@ -39,8 +39,8 @@ class Sudoku {
 		System.out.println("[*] Leser brettfil: \"" + this.brettFil + "\"");
 		System.out.print("[*] Fant følgende verdier: ");
 
-		int antallBoksRader = 0;
-		int antallBoksKolonner = 0;
+		int boksRader = 0;
+		int boksKolonner = 0;
 
 		try {
             BufferedReader data = new BufferedReader(new FileReader(this.brettFil));
@@ -54,11 +54,11 @@ class Sudoku {
 
                 // Antall rader i boks
                 if (linjeNr == 1)
-                	antallBoksRader = Integer.parseInt(dataLinje);
+                	boksRader = Integer.parseInt(dataLinje);
 
                 // Antall kolonner i boks
                 if (linjeNr == 2)
-                	antallBoksKolonner = Integer.parseInt(dataLinje);
+                	boksKolonner = Integer.parseInt(dataLinje);
 
                 // Verdier
                 if (linjeNr > 2) {
@@ -85,7 +85,7 @@ class Sudoku {
             data.close();
 
             // Brett
-            brett = new Brett(antallBoksKolonner, antallBoksRader, verdier);
+            brett = new Brett(boksRader, boksKolonner, verdier);
 
         } catch(IOException e) {
             // Exit

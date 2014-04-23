@@ -7,6 +7,8 @@ import java.util.ArrayList;
 // =================================================================================
 class Brett {
 	// Variabler
+	private int boksRader;
+	private int boksKolonner;
 	private int feltStorrelse;
 
 	public Rute[][] ruter;			/// TODO: PRIVATE
@@ -19,9 +21,11 @@ class Brett {
 	private ArrayList<Integer> verdier;
 
 	// Konstruktør
-	Brett(int x, int y, ArrayList<Integer> verdier) {
+	Brett(int boksRader, int boksKolonner, ArrayList<Integer> verdier) {
 		// Opprett tomt brett
-		this.feltStorrelse = (x * y);
+		this.boksRader = boksRader;
+		this.boksKolonner = boksKolonner;
+		this.feltStorrelse = (this.boksRader * this.boksKolonner);
 		this.verdier = verdier;
 
 		this.ruter = new Rute[this.feltStorrelse][this.feltStorrelse];
@@ -43,17 +47,30 @@ class Brett {
 		// }
 
 		// TESTING
+		System.out.println("\n\nBrett:");
+		System.out.println("=========================================");
+		System.out.println("Boksrader = " + this.boksRader);
+		System.out.println("Bokskolonner = " + this.boksKolonner);
+		System.out.println("Feltstørrelse = " + this.feltStorrelse);
+		System.out.println("Brettstørrelse = " + (this.feltStorrelse*this.feltStorrelse));
+
+		int ri, ki, bi;
+		ri = ki = bi = 0;
+		/*
 		System.out.println("\nRader:");
 		System.out.println("=========================================");
 		for (Rad r : this.rader)
-			// System.out.println(this.rader.indexOf(r) + ": " + r);
-			System.out.println(r);
+			System.out.println(ri++ + ": " + r);
 
 		System.out.println("\nKolonner:");
 		System.out.println("=========================================");
 		for (Kolonne k : this.kolonner)
-			// System.out.println(this.rader.indexOf(r) + ": " + r);
-			System.out.println(k);
+			System.out.println(ki++ + ": " + k);
+		*/
+		System.out.println("\nBokser:");
+		System.out.println("=========================================");
+		for (Boks b : this.bokser)
+			System.out.println(bi++ + ": " + b);
 	}
 
 
@@ -61,8 +78,8 @@ class Brett {
 	// Generer brett
 	private void genererBrett() {
 		// Sett ruteverdier
-		int ant, y, x;
-		ant = y = x = 0;
+		int ant, r, k;
+		ant = r = k = 0;
 
 		for(int verdi : this.verdier) {
 			// Rute
@@ -74,14 +91,14 @@ class Brett {
 				rute = new StatiskRute(verdi);
 
 			// Legg til rute
-			this.ruter[x][y] = rute;
+			this.ruter[r][k] = rute;
 
-			x++;
+			r++;
 
 			// Ny rad
 			if (++ant%this.feltStorrelse == 0) {
-				x = 0;
-				y++;
+				r = 0;
+				k++;
 			}
 		}
 
@@ -96,89 +113,34 @@ class Brett {
 			}
 		}
 
+		// Bokser
+		int h = 0;
+		int bnr = 0;
 
+		for (int i = 0; i < this.feltStorrelse; i++) {
+			int[][] boks = new int[this.boksKolonner][this.boksRader];
 
+			int b = 0;
 
-		// Løp gjennom gitte verdier
-		/*
-		for (int i = 0; i < verdier.size(); i++) {
-			// Rute
-			Rute rute;
+			for (int j = 0; j < this.feltStorrelse; j++) {
+				if (j%this.boksKolonner==0) {
+					if (h%this.boksRader==0) {
+						bnr = 0;
+						// NY BOKS HER
+					}
 
-			if (verdier.get(i) == 0)
-				rute = new VariabelRute(verdier.get(i));
-			else
-				rute = new StatiskRute(verdier.get(i));
+					System.out.print("\nB" + bnr++ + ": rad=" + i + ", kol=" + j + " ----- ");
 
-
-			// Ny rad
-			if (i%this.feltStorrelse==0) {
-				// Ny rad
-				gjeldendeRad = new Rad(this.feltStorrelse);
-				this.rader.add(gjeldendeRad);
-
-				// Kolonne
-				if ((gjeldendeKolonne == null) || (gjeldendeKolonne.erFull()))
-					// Ny kollonne
-				gjeldendeKolonne.settInnRute(rute);
-			}
-
-
-			gjeldendeRad.settInnRute(rute);
-		}*/
-
-
-		/*
-		int ant, y, x;
-		ant = y = x = 0;
-
-		for(String verdi : this.verdier) {
-			// Rute
-			Rute rute;
-
-			if (verdi.equals(".")) {
-				// Variabel verdi
-				rute = new VariabelRute();
-			}
-			else {
-				// Statisk verdi
-				try {
-					rute = new StatiskRute(Integer.parseInt(verdi));
+					h++;
+					b = 0;
 				}
-				catch (NumberFormatException e) {
-					rute = new StatiskRute(("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(verdi) + 10));
-				}
+
+				System.out.print(this.ruter[j][i].hentVerdi() + " (" + (bnr-1) +"," + b++ + "), ");
 			}
 
-			// Legg til rute
-			this.ruter[x][y] = rute;
 
-			x++;
-
-			// Ny rad
-			if (++ant%this.feltStorrelse == 0) {
-				x = 0;
-				y++;
-			}
+			// if (i%this.y==0)
+			// 	h++;
 		}
-		*/
 	}
-
-	// Generer felter
-	/*
-	public Felt genererFelt(int[] fra, int[] til) {
-		System.out.println("[*] Fyller felt fra " + fra[0] + "x" + fra[1] + " til " + til[0] + "x" + til[1]);
-
-		int index = 0;
-
-		Rute[] feltRuter = new Rute[this.feltStorrelse];
-
-		for (int i = fra[0]; i <= til[0]; i++)
-			for (int j = fra[1]; j <= til[1]; j++)
-				feltRuter[index++] = this.ruter[i][j];
-				//System.out.println(i + "x" + j + "=" + this.ruter[i][j].hentVerdi());
-
-		return new Felt(feltRuter);
-	}*/
-
 }

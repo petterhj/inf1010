@@ -56,6 +56,19 @@ class Boks extends Felt {
 	Boks(int storrelse) {
 		super(storrelse);
 	}
+
+	// String-representasjon
+	public String toString() {
+		String boksstring = "";
+
+		for (Rute r : super.hentRuter())
+			if (r.hentVerdi() == 0)
+				boksstring += "[_]";
+			else
+				boksstring += "[" + r.hentVerdi() + "]";
+
+		return boksstring;
+	}
 }
 
 
@@ -70,6 +83,7 @@ class Kolonne extends Felt {
 		super(storrelse);
 	}
 
+	// String-representasjon
 	public String toString() {
 		String kolstring = "";
 
@@ -95,6 +109,7 @@ class Rad extends Felt {
 		super(storrelse);
 	}
 
+	// String-representasjon
 	public String toString() {
 		String radstring = "";
 
