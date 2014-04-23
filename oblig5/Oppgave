@@ -1,0 +1,67 @@
+Definisjoner
+	Rute	= Minste enhet på brettet
+	Brett 	= Alle n x n ruter
+	Rad		= En vannrett rekke med n ruter
+	Kolonne	= En loddrett rekke med n ruter
+	Boks	= Flere markerte vannrette og lodrette ruter
+
+Tre mulig løsninger ved utfylte brett:
+	1. Én løsning
+	2. Ingen løsning
+	3. Flere løsninger
+
+Retningslinjer:
+	1. Skal inneholde "class SudokuBeholder", med tre public metoder:
+		1. settInn() - finne løsninger og legge dem inn i objekt av SudokuBeholder
+		2. taUt() - 
+		3. hentAntallLosninger() - holde orden på hvor mange løsninger som er funnet (maksantall: 750)
+
+	2. Skal inneholde klassene
+		1. class Rute(), med to subklasser:
+			1. Ruter som har en forhåndsutfylt verdi
+			2. Ruter der man skal finne mulig verdi
+
+			Klassen Rute skal ikke ha noen datastruktur (annet enn sin egen verdi), som 
+			sier noe om hvilke verdier som er lovlige i denne ruten.
+
+			Hver enkelt Rute skal ha en metode, fyllUtRestenAvBrettet(), som prøver å sette 
+			alle tall i seg selv (prøver først med 1, så 2, osv), og lykkes dette for et tall,
+			kalles samme metode i neste rute (den rett til høyre).
+
+			Når en vannrett rad er ferdig (ingen rute til høyre), kalles metoden helt til 
+			venstre på neste rad, osv.
+
+			Når et kall på fyllUtRestenAvBrettet() i neste rute returnerer, prøver ruten neste 
+			tall som enda ikke er prøvd, osv. helt til alle tall er prøvd i denne ruten.
+
+			Main-metoden starter det hele ved å kalle fyllUtRestenAvBrettet() i den øvrste 
+			venstre ruten. Når metoden har funnet en lovlig verdi i den siste ruten (nederst 
+			til høyre) på brettet, legges denne løsningen inn i beholderen.
+		
+		2. class Brett() - inneholder en todimensjonal tabell med pekere til alle rutene
+
+		3. Felles superklasse for følgende klasser, med mest mulig gjenbruk:
+			1. class Boks()
+			2. class Kolonne()
+			3. class Rad()
+
+			Når en rute sjekker om den kan bruke en verdi, skal ruten kalle metoder
+			som gjør dette i rutens kolonne-objekt, rad-objekt og boks-objekt.
+
+	3. Størrelsen på brettet og selve oppgaven (forhåndsutfylte tall) skal leses fra fil.
+	   Filnavnet oppgis som parameter til programmet.
+
+	   - Hvis det oppgis ett filnavn, skal løsningene skrives til skjerm.
+	   - Hvis det oppgis to filnavn, skal oppgavene løses fra den første, og løsningen(e)
+	     skrives på den andre filen (og ikke til skjerm).
+
+
+Filformat:
+	1. Første tall 			= antall rader i hver boks
+	2. Andre tall 			= antall kolonner i boks
+	3. Første * Andre tall 	= antall ruter i en kolonne, boks og rad
+
+	4. "." betyr tom rute
+	5. Trengs flere enn 10 siffer, bruker vi A = 10, B = 11, osv.
+	
+
