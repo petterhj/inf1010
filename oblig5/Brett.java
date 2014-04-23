@@ -116,31 +116,37 @@ class Brett {
 		// Bokser
 		int h = 0;
 		int bnr = 0;
+		int brad = 0;
+
+		for (int i = 0; i < this.feltStorrelse; i++)
+			this.bokser[i] = new Boks(this.feltStorrelse);
 
 		for (int i = 0; i < this.feltStorrelse; i++) {
-			int[][] boks = new int[this.boksKolonner][this.boksRader];
-
-			int b = 0;
-
 			for (int j = 0; j < this.feltStorrelse; j++) {
 				if (j%this.boksKolonner==0) {
 					if (h%this.boksRader==0) {
 						bnr = 0;
-						// NY BOKS HER
+						// System.out.println();
+					}
+					if (h%(this.boksRader*this.boksRader)==0) {
+						brad++;
+						// System.out.println();
 					}
 
-					System.out.print("\nB" + bnr++ + ": rad=" + i + ", kol=" + j + " ----- ");
+					// System.out.print("\nB -- bnr=" + bnr + ", brad=" + (brad-1) + ", \tboksnr=" + ((brad-1)+(bnr+(brad-1))) + ", \th=" + h + ", \trad=" + i + ", kol=" + j + " ----- ");
 
+					bnr++;
 					h++;
-					b = 0;
 				}
 
-				System.out.print(this.ruter[j][i].hentVerdi() + " (" + (bnr-1) +"," + b++ + "), ");
+				System.out.println(this.ruter[j][i].hentVerdi() + " --> sett i boks #" + (((brad-1)+(bnr+(brad-1)))-1));
+				this.bokser[(((brad-1)+(bnr+(brad-1)))-1)].settInnRute(this.ruter[j][i]);
+				//System.out.print(this.ruter[j][i].hentVerdi());
+
+				// System.out.print("(" + ((bnr*brad)-1) + ")");
 			}
 
 
-			// if (i%this.y==0)
-			// 	h++;
 		}
 	}
 }
