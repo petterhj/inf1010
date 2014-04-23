@@ -126,23 +126,24 @@ class Brett {
 				if (j%this.boksKolonner==0) {
 					if (h%this.boksRader==0) {
 						bnr = 0;
-						// System.out.println();
+						System.out.println();
 					}
 					if (h%(this.boksRader*this.boksRader)==0) {
 						brad++;
-						// System.out.println();
+						System.out.println();
 					}
 
-					// System.out.print("\nB -- bnr=" + bnr + ", brad=" + (brad-1) + ", \tboksnr=" + ((brad-1)+(bnr+(brad-1))) + ", \th=" + h + ", \trad=" + i + ", kol=" + j + " ----- ");
+					System.out.print("\nB -- bnr=" + bnr + ", brad=" + (brad-1) + ", \tboksnr=" + ((i+bnr)-(i%this.boksRader)) + ", \th=" + h + ", \trad=" + i + ", kol=" + j + ", modR=" + (i%this.boksRader) + ", modK=" + (j%this.boksKolonner) + " ----- ");
 
 					bnr++;
 					h++;
 				}
 
-				System.out.println(this.ruter[j][i].hentVerdi() + " --> sett i boks #" + (((brad-1)+(bnr+(brad-1)))-1));
-				this.bokser[(((brad-1)+(bnr+(brad-1)))-1)].settInnRute(this.ruter[j][i]);
-				//System.out.print(this.ruter[j][i].hentVerdi());
+				// System.out.println(this.ruter[j][i].hentVerdi() + " --> sett i boks #" + (((brad-1)+(bnr+(brad-1)))-1));
 
+				System.out.print("| boksnr=" + (((i+bnr)-(i%this.boksRader))-1) + " -- " + this.ruter[j][i].hentVerdi());
+
+				this.bokser[(((i+bnr)-(i%this.boksRader))-1)].settInnRute(this.ruter[j][i]);
 				// System.out.print("(" + ((bnr*brad)-1) + ")");
 			}
 
