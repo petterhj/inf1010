@@ -1,20 +1,25 @@
 // Class: SudokuBeholder
 class SudokuBeholder {
 	// Variabler
+	private int antallLosninger;
 
 	// Konstruktør	
 	SudokuBeholder() {
-
+		antallLosninger = 0;
 	}
 
-	// Metoder
+	// Sett inn løsning
 	public void settInn() {
-		
+		this.antallLosninger++;
 	}
-	public void taUt() {
 
+	// Ta ut løsning
+	public void taUt() {
+		this.antallLosninger--;
 	}
+
+	// Returner antall løsninger
 	public int hentAntallLosninger() {
-		return 0;
+		return this.antallLosninger;
 	}
 }

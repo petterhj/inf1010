@@ -19,10 +19,7 @@ class Sudoku {
 			this.brettFil = args[0];
 		if (args.length == 2)
 			this.losningsFil = args[1];
-	}
 
-	// Start spill
-	public void startSpill() {
 		// Sjekk om brettfil er gitt
 		if (this.brettFil == null) {
 			System.out.println("[FEIL] Ingen brettfil angitt, gis med: Oblig5 <brettfil> [løsningsfil]");
@@ -31,18 +28,24 @@ class Sudoku {
 			// Les brettet
 			this.lesInnBrett();
 		}
+	}
 
+	// Finn losninger
+	public void finnLosninger() {
+		System.out.println(this.brett);
+		System.out.println("[*] Leter etter løsninger...");
 	}
 
 	// Les sudokubrett
 	public void lesInnBrett() {
 		System.out.println("[*] Leser brettfil: \"" + this.brettFil + "\"");
-		System.out.print("[*] Fant følgende verdier: ");
 
 		int boksRader = 0;
 		int boksKolonner = 0;
 
 		try {
+			System.out.println("[*] Leser inn verdier...");
+
             BufferedReader data = new BufferedReader(new FileReader(this.brettFil));
             
             String dataLinje;
@@ -75,12 +78,9 @@ class Sudoku {
 						}
 
                 		verdier.add(verdi);
-                		System.out.print(verdi);
                 	}
                 }
             }
-
-            System.out.println();
             
             data.close();
 

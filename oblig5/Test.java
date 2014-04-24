@@ -3,39 +3,44 @@ class Test {
 		System.out.println("\n\n\n==================================================================");
 		System.out.println("TESTING\n\n\n");
 
-		//System.out.println(spill);
 
-		/*
-
-		int boksX = 2;
-		int boksY = 3;
-		int storrelse = (boksX*boksY);
-		int j = 0;
-
-		int[] verdier = {0, 0, 3, 6, 0, 0, 0, 2, 0, 0, 0, 4, 5, 0, 0, 0, 6, 0, 0, 3, 0, 0, 0, 5, 3, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0};
-		
-		int antall = verdier.length;
-
-		Rad[] rader = new Rad[storrelse];
-		Kolonne[] kolonner = new Kolonne[storrelse];
-		Felt[] felter = new Felt[storrelse];
-		*/
-
-		/*
-		for (int i = 0; i < verdier.length; i++) {
-			Rute rute = new Rute(verdier[i]);
-
-			if (antall--%storrelse==0) {
-				System.out.println("RAD");
-				j++;
-			}
 
 			
 
-			//System.out.println(j + "x" + i);
-			System.out.println(verdier[i]);
 
-		}
+		Rute forste = spill.brett.hentRader()[0].hentRuter().get(0);
+
+		forste.fyllUtRestenAvBrettet();
+
+
+		System.out.println(spill.brett);
+
+		// TESTING
+		/*
+		System.out.println("\n\nBrett:");
+		System.out.println("=========================================");
+		// System.out.println("Boksrader = " + this.boksRader);
+		// System.out.println("Bokskolonner = " + this.boksKolonner);
+		// System.out.println("Feltstørrelse = " + this.feltStorrelse);
+		// System.out.println("Brettstørrelse = " + (this.feltStorrelse*this.feltStorrelse));
+
+		int ri, ki, bi;
+		ri = ki = bi = 0;
+
+		System.out.println("\nRader:");
+		System.out.println("=========================================");
+		for (Rad r : spill.brett.hentRader())
+			System.out.println(ri++ + ": " + r);
+
+		System.out.println("\nKolonner:");
+		System.out.println("=========================================");
+		for (Kolonne k : spill.brett.hentKolonner())
+			System.out.println(ki++ + ": " + k);
+
+		System.out.println("\nBokser:");
+		System.out.println("=========================================");
+		for (Boks b : spill.brett.hentBokser())
+			System.out.println(bi++ + ": " + b);
 		*/
 
 

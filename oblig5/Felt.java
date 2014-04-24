@@ -1,4 +1,5 @@
 // Imports
+import java.util.Arrays;
 import java.util.ArrayList;
 
 
@@ -6,94 +7,54 @@ import java.util.ArrayList;
 // =================================================================================
 class Felt {
 	// Variabler
-	private int storrelse;
 	private ArrayList<Rute> ruter;
-	//Rute[] ruter;
+	private Brett brett;
 
 	// Konstruktør
-	Felt(int storrelse) {
-		 this.ruter = new ArrayList<Rute>(storrelse);
+	Felt(Brett brett) {
+		 this.ruter = new ArrayList<Rute>();
+		 this.brett = brett;
 	}
 
 	// Sett inn rute
-	public void settInnRute(Rute r) {
+	public void leggTilRute(Rute r) {
 		this.ruter.add(r);
 	}
 
-	// Returnerer felter
+	// Returnerer ruter
 	public ArrayList<Rute> hentRuter() {
 		return this.ruter;
 	}
 
-	// Returner summerte ruteverdier
-	public int feltSum() {
-		// TODO
-		return 0;
-	}
+	// Sjekk om felt inneholder verdi
+	public boolean inneholderVerdi(int verdi) {
+		for (Rute r : this.hentRuter())
+			if (r.hentVerdi() == verdi)
+				return true;
 
-	// Returnerer antall statiske ruter
-	public int antallStatiskeRuter() {
-		// TODO
-		return 0;
-	}
-
-	// Sjekker om felt er fult
-	public boolean erFull() {
-		if (this.ruter.size() == this.storrelse)
-			return true;
 		return false;
 	}
-}
 
-
-// 	Class: Boks
-// =================================================================================
-class Boks extends Felt {
-	// Variabler
-	
-
-	// Konstruktør
-	Boks(int storrelse) {
-		super(storrelse);
+	// Returnerer størrelse
+	public int storrelse() {
+		return this.ruter.size();
 	}
+
 
 	// String-representasjon
 	public String toString() {
-		String boksstring = "";
+		String rep = "";
 
-		for (Rute r : super.hentRuter())
+		for (Rute r : this.hentRuter())
 			if (r.hentVerdi() == 0)
-				boksstring += "[_]";
+				rep += "[_]";
 			else
-				boksstring += "[" + r.hentVerdi() + "]";
+				if (r instanceof StatiskRute)
+					rep += "[\033[94m" + r.hentVerdi() + "\033[0m]";
+				else
+					rep += "[" + r.hentVerdi() + "]";
 
-		return boksstring;
-	}
-}
-
-
-// 	Class: Kolonne
-// =================================================================================
-class Kolonne extends Felt {
-	// Variabler
-	
-
-	// Konstruktør
-	Kolonne(int storrelse) {
-		super(storrelse);
-	}
-
-	// String-representasjon
-	public String toString() {
-		String kolstring = "";
-
-		for (Rute r : super.hentRuter())
-			if (r.hentVerdi() == 0)
-				kolstring += "[_]";
-			else
-				kolstring += "[" + r.hentVerdi() + "]";
-
-		return kolstring;
+		return rep;
 	}
 }
 
@@ -101,24 +62,47 @@ class Kolonne extends Felt {
 // 	Class: Rad
 // =================================================================================
 class Rad extends Felt {
-	// Variabler
-	
-
 	// Konstruktør
-	Rad(int storrelse) {
-		super(storrelse);
+	Rad(Brett brett) {
+		super(brett);
 	}
 
-	// String-representasjon
-	public String toString() {
-		String radstring = "";
+	// Sett inn rute
+	public void settInnRute(Rute r) {
+		super.leggTilRute(r);
 
-		for (Rute r : super.hentRuter())
-			if (r.hentVerdi() == 0)
-				radstring += "[_]";
-			else
-				radstring += "[" + r.hentVerdi() + "]";
+		r.settRad(this);
+	}
+}
 
-		return radstring;
+// 	Class: Kolonne
+// =================================================================================
+class Kolonne extends Felt {
+	// Konstruktør
+	Kolonne(Brett brett) {
+		super(brett);
+	}
+
+	// Sett inn rute
+	public void settInnRute(Rute r) {
+		super.leggTilRute(r);
+
+		r.settKolonne(this);
+	}
+}
+
+// 	Class: Boks
+// =================================================================================
+class Boks extends Felt {
+	// Konstruktør
+	Boks(Brett brett) {
+		super(brett);
+	}
+
+	// Sett inn rute
+	public void settInnRute(Rute r) {
+		super.leggTilRute(r);
+
+		r.settBoks(this);
 	}
 }

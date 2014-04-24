@@ -9,16 +9,15 @@ class Brett {
 	// Variabler
 	private int boksRader;
 	private int boksKolonner;
-	private int feltStorrelse;
+	public int feltStorrelse;						// TODO: PRIVATE
 
-	public Rute[][] ruter;			/// TODO: PRIVATE
+	public Rute[][] ruter;							// TODO: PRIVATE
 
 	private Boks[] bokser;
-	public Rad[] rader;				// TODO: PRIVATE
-	//private ArrayList<Rad> rader;
+	private Rad[] rader;
 	private Kolonne[] kolonner;
 
-	private ArrayList<Integer> verdier;
+	public ArrayList<Integer> verdier; 				// TODO: PRIVATE
 
 	// Konstruktør
 	Brett(int boksRader, int boksKolonner, ArrayList<Integer> verdier) {
@@ -32,54 +31,20 @@ class Brett {
 
 		this.bokser = new Boks[this.feltStorrelse];
 		this.rader = new Rad[this.feltStorrelse];
-		//this.rader = new ArrayList<Rad>();
 		this.kolonner = new Kolonne[this.feltStorrelse];
 
 		// Generer brett
 		this.genererBrett();
-
-		// // Generer rader
-		// for (int i = 0; i < this.feltStorrelse; i++) {
-		// 	int[] fra = {0, i};
-		// 	int[] til = {(this.feltStorrelse-1), i};
-
-		// 	this.rader[i] = (Rad) this.genererFelt(fra, til);
-		// }
-
-		// TESTING
-		System.out.println("\n\nBrett:");
-		System.out.println("=========================================");
-		System.out.println("Boksrader = " + this.boksRader);
-		System.out.println("Bokskolonner = " + this.boksKolonner);
-		System.out.println("Feltstørrelse = " + this.feltStorrelse);
-		System.out.println("Brettstørrelse = " + (this.feltStorrelse*this.feltStorrelse));
-
-		int ri, ki, bi;
-		ri = ki = bi = 0;
-		/*
-		System.out.println("\nRader:");
-		System.out.println("=========================================");
-		for (Rad r : this.rader)
-			System.out.println(ri++ + ": " + r);
-
-		System.out.println("\nKolonner:");
-		System.out.println("=========================================");
-		for (Kolonne k : this.kolonner)
-			System.out.println(ki++ + ": " + k);
-		*/
-		System.out.println("\nBokser:");
-		System.out.println("=========================================");
-		for (Boks b : this.bokser)
-			System.out.println(bi++ + ": " + b);
 	}
-
-
 
 	// Generer brett
 	private void genererBrett() {
+		System.out.println("[*] Genrerer " + this.feltStorrelse + "x" + this.feltStorrelse + " brett...");
+
 		// Sett ruteverdier
 		int ant, r, k;
 		ant = r = k = 0;
+		Rute forrige = null;
 
 		for(int verdi : this.verdier) {
 			// Rute
@@ -91,9 +56,13 @@ class Brett {
 				rute = new StatiskRute(verdi);
 
 			// Legg til rute
-			this.ruter[r][k] = rute;
+			this.ruter[r++][k] = rute;
 
-			r++;
+			// Sett nestepeker
+			if (forrige != null)
+				forrige.settNeste(rute);
+
+			forrige = rute;
 
 			// Ny rad
 			if (++ant%this.feltStorrelse == 0) {
@@ -102,52 +71,56 @@ class Brett {
 			}
 		}
 
-		// Rader og kolonner
+		// Opprett antall felter (rader, kolonner, bokser)
 		for (int i = 0; i < this.feltStorrelse; i++) {
-			this.rader[i] = new Rad(this.feltStorrelse);
-			this.kolonner[i] = new Kolonne(this.feltStorrelse);
+			this.rader[i] = new Rad(this);
+			this.kolonner[i] = new Kolonne(this);
+			this.bokser[i] = new Boks(this);
+		}
 
+		// Fyll feltruter
+		int h = 0;
+		int bnr = 0;
+
+		for (int i = 0; i < this.feltStorrelse; i++) {
 			for (int j = 0; j < this.feltStorrelse; j++) {
 				this.rader[i].settInnRute(this.ruter[j][i]);
 				this.kolonner[i].settInnRute(this.ruter[i][j]);
-			}
-		}
 
-		// Bokser
-		int h = 0;
-		int bnr = 0;
-		int brad = 0;
-
-		for (int i = 0; i < this.feltStorrelse; i++)
-			this.bokser[i] = new Boks(this.feltStorrelse);
-
-		for (int i = 0; i < this.feltStorrelse; i++) {
-			for (int j = 0; j < this.feltStorrelse; j++) {
 				if (j%this.boksKolonner==0) {
-					if (h%this.boksRader==0) {
+					if (h++%this.boksRader==0)
 						bnr = 0;
-						System.out.println();
-					}
-					if (h%(this.boksRader*this.boksRader)==0) {
-						brad++;
-						System.out.println();
-					}
-
-					System.out.print("\nB -- bnr=" + bnr + ", brad=" + (brad-1) + ", \tboksnr=" + ((i+bnr)-(i%this.boksRader)) + ", \th=" + h + ", \trad=" + i + ", kol=" + j + ", modR=" + (i%this.boksRader) + ", modK=" + (j%this.boksKolonner) + " ----- ");
 
 					bnr++;
-					h++;
 				}
 
-				// System.out.println(this.ruter[j][i].hentVerdi() + " --> sett i boks #" + (((brad-1)+(bnr+(brad-1)))-1));
-
-				System.out.print("| boksnr=" + (((i+bnr)-(i%this.boksRader))-1) + " -- " + this.ruter[j][i].hentVerdi());
-
 				this.bokser[(((i+bnr)-(i%this.boksRader))-1)].settInnRute(this.ruter[j][i]);
-				// System.out.print("(" + ((bnr*brad)-1) + ")");
 			}
-
-
 		}
+	}
+
+	// Returner bokser
+	public Boks[] hentBokser() {
+		return this.bokser;
+	}
+
+	// Returner rader
+	public Rad[] hentRader() {
+		return this.rader;
+	}
+
+	// Returner kolonner
+	public Kolonne[] hentKolonner() {
+		return this.kolonner;
+	}
+
+	// String-representasjon av brett
+	public String toString() {
+		String brettString = "\n";
+		
+		for (Rad r : this.hentRader())
+			brettString += "\t" + r + "\n";
+
+		return brettString;
 	}
 }
