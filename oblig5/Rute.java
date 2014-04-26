@@ -21,7 +21,43 @@ class Rute {
 
 	// Fyll ut resten av brettet
 	public void fyllUtRestenAvBrettet() {
-		System.out.println("Sjekker " + this + " (neste: " + this.neste + ")");
+		//System.out.println("D: " + this + " \tN: " + this.neste);
+
+		for (int i = 1; i <= this.rad.storrelse(); i++) {
+			Rute gjeldende = this;
+
+			while (gjeldende.neste != null) {
+				// Variabel rute
+				if (gjeldende instanceof VariabelRute) {
+					//System.out.println("test" + i);
+
+					if (gjeldende.sjekkFeltVerdier(i)) {
+						// Sett verdi
+						this.settVerdi(i);
+					}
+					else {
+						break;
+					}
+				}
+
+				// Gå til neste
+				gjeldende = gjeldende.neste;
+
+				gjeldende.fyllUtRestenAvBrettet();
+			}
+
+			// Siste rute
+			if (gjeldende.neste == null)
+				// Sjekk om ferdigutfylt
+				System.out.println("SISTE RUTE");
+				System.out.println(gjeldende.hentBoks().hentBrett().erUtfylt());
+
+		}
+	}
+	
+	// Fyll ut resten av brettet
+	public void fyllUtRestenAvBrettet2() {
+		System.out.println("D: " + this + " \tN: " + this.neste);
 		
 		if (this instanceof StatiskRute)
 			if (this.neste != null)
@@ -65,6 +101,10 @@ class Rute {
 	// Sett forelder-boks
 	public void settBoks(Boks b) {
 		this.boks = b;
+	}
+	// Hent forelder-boks
+	public Boks hentBoks() {
+		return this.boks;
 	}
 
 	// Sett nestepeker

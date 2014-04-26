@@ -21,7 +21,7 @@ class Felt {
 		this.ruter.add(r);
 	}
 
-	// Returnerer ruter
+	// Returnerer feltruter
 	public ArrayList<Rute> hentRuter() {
 		return this.ruter;
 	}
@@ -40,12 +40,21 @@ class Felt {
 		return this.ruter.size();
 	}
 
+	// Returner brett
+	public Brett hentBrett() {
+		return this.brett;
+	}
+
 
 	// String-representasjon
 	public String toString() {
 		String rep = "";
 
-		for (Rute r : this.hentRuter())
+		for (Rute r : this.hentRuter()) {
+
+			if (r.hentBoks().hentRuter().indexOf(r)%r.hentBoks().hentAntallKolonner()==0)
+				rep += " ";
+
 			if (r.hentVerdi() == 0)
 				rep += "[_]";
 			else
@@ -53,6 +62,7 @@ class Felt {
 					rep += "[\033[94m" + r.hentVerdi() + "\033[0m]";
 				else
 					rep += "[" + r.hentVerdi() + "]";
+		}
 
 		return rep;
 	}
@@ -94,9 +104,16 @@ class Kolonne extends Felt {
 // 	Class: Boks
 // =================================================================================
 class Boks extends Felt {
+	// Variabler
+	int rader;
+	int kolonner;
+
 	// Konstruktør
-	Boks(Brett brett) {
+	Boks(Brett brett, int rader, int kolonner) {
 		super(brett);
+
+		this.rader = rader;
+		this.kolonner = kolonner;
 	}
 
 	// Sett inn rute
@@ -104,5 +121,15 @@ class Boks extends Felt {
 		super.leggTilRute(r);
 
 		r.settBoks(this);
+	}
+
+	// Returner antall rader i boks
+	public int hentAntallRader() {
+		return this.rader;
+	}
+
+	// Returner kolonner rader i boks
+	public int hentAntallKolonner() {
+		return this.kolonner;
 	}
 }

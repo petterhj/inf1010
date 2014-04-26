@@ -75,7 +75,7 @@ class Brett {
 		for (int i = 0; i < this.feltStorrelse; i++) {
 			this.rader[i] = new Rad(this);
 			this.kolonner[i] = new Kolonne(this);
-			this.bokser[i] = new Boks(this);
+			this.bokser[i] = new Boks(this, boksRader, boksKolonner);
 		}
 
 		// Fyll feltruter
@@ -114,12 +114,38 @@ class Brett {
 		return this.kolonner;
 	}
 
+	// Returnerer første rute
+	public Rute hentForsteRute() {
+		return this.ruter[0][0];
+	}
+
+	// Returnerer siste rute
+	public Rute hentSisteRute() {
+		return this.ruter[(this.feltStorrelse-1)][(this.feltStorrelse-1)];
+	}
+
+	// Sjekk om komplett
+	public boolean erUtfylt() {
+		for (int i = 0; i < this.feltStorrelse; i++)
+			for (int j = 0; j < this.feltStorrelse; j++)
+				if (this.ruter[j][i].hentVerdi() == 0)
+					return false;
+
+		return true;
+
+	}
+
 	// String-representasjon av brett
 	public String toString() {
-		String brettString = "\n";
+		String brettString = "";
 		
-		for (Rad r : this.hentRader())
-			brettString += "\t" + r + "\n";
+		for (int i = 0; i < this.hentRader().length; i++) {
+			if (i%this.boksRader==0)
+				brettString += "\n";
+
+			brettString += "\t" + this.hentRader()[i] + "\n";
+
+		}
 
 		return brettString;
 	}

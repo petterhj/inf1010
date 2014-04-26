@@ -4,12 +4,10 @@ class Test {
 		System.out.println("TESTING\n\n\n");
 
 
+		Rute forste = spill.brett.hentForsteRute();
+		Rute siste = spill.brett.hentSisteRute();
 
-			
-
-
-		Rute forste = spill.brett.hentRader()[0].hentRuter().get(0);
-
+		
 		forste.fyllUtRestenAvBrettet();
 
 
