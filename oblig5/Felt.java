@@ -8,12 +8,10 @@ import java.util.ArrayList;
 class Felt {
 	// Variabler
 	private ArrayList<Rute> ruter;
-	private Brett brett;
 
 	// Konstruktør
-	Felt(Brett brett) {
+	Felt() {
 		 this.ruter = new ArrayList<Rute>();
-		 this.brett = brett;
 	}
 
 	// Sett inn rute
@@ -26,7 +24,7 @@ class Felt {
 		return this.ruter;
 	}
 
-	// Sjekk om felt inneholder verdi
+	// Sjekk om felt inneholder gitt verdi
 	public boolean inneholderVerdi(int verdi) {
 		for (Rute r : this.hentRuter())
 			if (r.hentVerdi() == verdi)
@@ -40,43 +38,58 @@ class Felt {
 		return this.ruter.size();
 	}
 
-	// Returner brett
-	public Brett hentBrett() {
-		return this.brett;
-	}
-
-
 	// String-representasjon
+	public String toString() {
+		String cB = "\033[32m";
+		String cM = "\033[37m";
+		String cR = "\033[91m";
+		String cW = "\033[0m";
+		String rad = "";
+
+		for (int i = 0; i < this.hentRuter().size(); i++) {
+			Rute r = this.hentRuter().get(i);
+			rad += " ";
+			if (r instanceof StatiskRute)
+				rad += cR + r.hentVerdi() + cW;
+			if (r instanceof VariabelRute) {
+				if (r.hentVerdi() == 0)
+					rad += " ";
+				else
+					rad += r.hentVerdi();
+			}
+			//if ((i == (this.hentRuter().size()-1)) || (i%2==0))
+			if ((i+1)%r.hentBoks().hentAntallKolonner()==0)
+				rad += cB + " |" + cW;
+			else
+				rad += cM + " |" + cW;
+		}
+
+		return rad;
+	}
+	/*
 	public String toString() {
 		String rep = "";
 
 		for (Rute r : this.hentRuter()) {
-
 			if (r.hentBoks().hentRuter().indexOf(r)%r.hentBoks().hentAntallKolonner()==0)
 				rep += " ";
-
 			if (r.hentVerdi() == 0)
-				rep += "[_]";
+				rep += "   ";
 			else
 				if (r instanceof StatiskRute)
-					rep += "[\033[94m" + r.hentVerdi() + "\033[0m]";
-				else
-					rep += "[" + r.hentVerdi() + "]";
+					rep += " \033[91m" + r.hentVerdi() + "\033[0m ";
+				if (r instanceof VariabelRute)
+					rep += " " + r.hentVerdi() + " |";
 		}
 
 		return rep;
-	}
+	}*/
 }
 
 
 // 	Class: Rad
 // =================================================================================
 class Rad extends Felt {
-	// Konstruktør
-	Rad(Brett brett) {
-		super(brett);
-	}
-
 	// Sett inn rute
 	public void settInnRute(Rute r) {
 		super.leggTilRute(r);
@@ -88,11 +101,6 @@ class Rad extends Felt {
 // 	Class: Kolonne
 // =================================================================================
 class Kolonne extends Felt {
-	// Konstruktør
-	Kolonne(Brett brett) {
-		super(brett);
-	}
-
 	// Sett inn rute
 	public void settInnRute(Rute r) {
 		super.leggTilRute(r);
@@ -109,9 +117,7 @@ class Boks extends Felt {
 	int kolonner;
 
 	// Konstruktør
-	Boks(Brett brett, int rader, int kolonner) {
-		super(brett);
-
+	Boks(int rader, int kolonner) {
 		this.rader = rader;
 		this.kolonner = kolonner;
 	}

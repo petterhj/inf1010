@@ -7,6 +7,8 @@ import java.util.ArrayList;
 // =================================================================================
 class Brett {
 	// Variabler
+	private Sudoku spill;
+
 	private int boksRader;
 	private int boksKolonner;
 	public int feltStorrelse;						// TODO: PRIVATE
@@ -20,7 +22,9 @@ class Brett {
 	public ArrayList<Integer> verdier; 				// TODO: PRIVATE
 
 	// Konstruktør
-	Brett(int boksRader, int boksKolonner, ArrayList<Integer> verdier) {
+	Brett(Sudoku spill, int boksRader, int boksKolonner, ArrayList<Integer> verdier) {
+		this.spill = spill;
+
 		// Opprett tomt brett
 		this.boksRader = boksRader;
 		this.boksKolonner = boksKolonner;
@@ -33,13 +37,15 @@ class Brett {
 		this.rader = new Rad[this.feltStorrelse];
 		this.kolonner = new Kolonne[this.feltStorrelse];
 
-		// Generer brett
-		this.genererBrett();
+		System.out.println("[*] Genrerer " + this.feltStorrelse + "x" + this.feltStorrelse + " brett, med " + this.boksRader + "x" + this.boksKolonner + " bokser...");
+
+		// Fordel verdier
+		this.fordelVerdier();
 	}
 
-	// Generer brett
-	private void genererBrett() {
-		System.out.println("[*] Genrerer " + this.feltStorrelse + "x" + this.feltStorrelse + " brett...");
+	// Fordel verdier
+	private void fordelVerdier() {
+		System.out.println("[*] Fordeler forhåndsgitte verdier...");
 
 		// Sett ruteverdier
 		int ant, r, k;
@@ -51,12 +57,14 @@ class Brett {
 			Rute rute;
 
 			if (verdi == 0)
-				rute = new VariabelRute();
+				rute = new VariabelRute(this);
 			else
-				rute = new StatiskRute(verdi);
+				rute = new StatiskRute(verdi, this);
 
 			// Legg til rute
-			this.ruter[r++][k] = rute;
+			int asd = r++;
+			rute.settPos(asd, k);
+			this.ruter[asd][k] = rute;
 
 			// Sett nestepeker
 			if (forrige != null)
@@ -73,9 +81,9 @@ class Brett {
 
 		// Opprett antall felter (rader, kolonner, bokser)
 		for (int i = 0; i < this.feltStorrelse; i++) {
-			this.rader[i] = new Rad(this);
-			this.kolonner[i] = new Kolonne(this);
-			this.bokser[i] = new Boks(this, boksRader, boksKolonner);
+			this.rader[i] = new Rad();
+			this.kolonner[i] = new Kolonne();
+			this.bokser[i] = new Boks(boksRader, boksKolonner);
 		}
 
 		// Fyll feltruter
@@ -97,6 +105,8 @@ class Brett {
 				this.bokser[(((i+bnr)-(i%this.boksRader))-1)].settInnRute(this.ruter[j][i]);
 			}
 		}
+
+		System.out.println(this);
 	}
 
 	// Returner bokser
@@ -114,14 +124,14 @@ class Brett {
 		return this.kolonner;
 	}
 
-	// Returnerer første rute
-	public Rute hentForsteRute() {
-		return this.ruter[0][0];
+	// Returnerer rute
+	public Rute hentRute(int x, int y) {
+		return this.ruter[x][y];
 	}
 
-	// Returnerer siste rute
-	public Rute hentSisteRute() {
-		return this.ruter[(this.feltStorrelse-1)][(this.feltStorrelse-1)];
+	// Returnerer spillobjekt
+	public Sudoku hentSpill() {
+		return this.spill;
 	}
 
 	// Sjekk om komplett
@@ -132,21 +142,80 @@ class Brett {
 					return false;
 
 		return true;
+	}
 
+	// Tøm brett fra koordinat
+	public void tomBrett(Rute r) {
+		if (r != null) {
+			if (r instanceof VariabelRute)
+				r.settVerdi(0);
+
+			this.tomBrett(r.neste);
+		}
 	}
 
 	// String-representasjon av brett
 	public String toString() {
+		String cB = "\033[32m";
+		String cM = "\033[37m";
+		String cW = "\033[0m";
+
 		String brettString = "";
-		
-		for (int i = 0; i < this.hentRader().length; i++) {
-			if (i%this.boksRader==0)
-				brettString += "\n";
+		int linjeLengde = (this.feltStorrelse*4);
 
-			brettString += "\t" + this.hentRader()[i] + "\n";
+		brettString += "\t" + cB;
+		for (int i = 0; i < linjeLengde; i++)
+			if (i%4==0) 
+				brettString += "+";
+			else
+				brettString += "-";
+		brettString += "+" + cW + "\n";
 
+		for (int j = 0; j < this.hentRader().length; j++) {
+			brettString += "\t" + cB + "|" + cW + this.hentRader()[j] + "\n";
+			brettString += "\t";
+			for (int i = 0; i < linjeLengde; i++)
+				if (i%4==0)
+					if ((i == 0) || (j == (this.hentRader().length-1)) || ((j+1)%this.boksRader==0))
+						brettString += cB + "+" + cW;
+					else
+						if (i%(4*this.boksKolonner)==0)
+							brettString += cB + "+" + cW;
+						else
+							brettString += cM + "+" + cW;
+				else
+					if ((j == (this.hentRader().length-1)) || ((j+1)%this.boksRader==0))
+						brettString += cB + "-" + cW;
+					else
+						brettString += cM + "-" + cW;
+			brettString += cB + "+" + cW + "\n";
 		}
 
 		return brettString;
 	}
+	/*
+	public String toString() {
+		String brettString = "";
+		String brettLinje = "\t+";
+		int linjeLengde = ((this.feltStorrelse*3) + (this.feltStorrelse/this.boksKolonner) + 1);
+		
+		for (int i = 0; i < this.hentRader().length; i++) {
+			if ((i != 0) && (i%this.boksRader==0)) {
+				brettString += "\t|";
+				for (int j = 0; j < linjeLengde; j++)
+					brettString += " ";
+				brettString += "|\n";
+			}
+
+
+			brettString += "\t|" + this.hentRader()[i] + " |\n";
+		}
+
+		for (int i = 0; i < linjeLengde; i++)
+			brettLinje += "-";
+
+		brettLinje += "+\n";
+
+		return brettLinje + brettString + brettLinje;
+	}*/
 }

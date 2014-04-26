@@ -10,6 +10,7 @@ class Sudoku {
 	private String brettFil;
 	private String losningsFil;
 
+	public SudokuBeholder beholder;
 	public Brett brett; 			// TODO: PRIVATE
 
 	// Konstruktør
@@ -25,6 +26,9 @@ class Sudoku {
 			System.out.println("[FEIL] Ingen brettfil angitt, gis med: Oblig5 <brettfil> [løsningsfil]");
 		}
 		else {
+			// Opprett beholder
+			this.beholder = new SudokuBeholder();
+
 			// Les brettet
 			this.lesInnBrett();
 		}
@@ -32,8 +36,13 @@ class Sudoku {
 
 	// Finn losninger
 	public void finnLosninger() {
-		System.out.println(this.brett);
 		System.out.println("[*] Leter etter løsninger...");
+
+
+		this.brett.hentRute(0, 0).fyllUtRestenAvBrettet();
+
+
+		System.out.println("[*] Fant totalt " + this.beholder.hentAntallLosninger() + " løsning(er)");
 	}
 
 	// Les sudokubrett
@@ -85,7 +94,7 @@ class Sudoku {
             data.close();
 
             // Brett
-            brett = new Brett(boksRader, boksKolonner, verdier);
+            brett = new Brett(this, boksRader, boksKolonner, verdier);
 
         } catch(IOException e) {
             // Exit
@@ -102,5 +111,10 @@ class Sudoku {
 	// Skriv løsning (til skjerm)
 	public void skrivLosning() {
 
+	}
+
+	// Returner beholder
+	public SudokuBeholder hentBeholder() {
+		return this.beholder;
 	}
 }

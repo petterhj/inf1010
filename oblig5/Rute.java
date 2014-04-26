@@ -6,76 +6,71 @@ import java.util.ArrayList;
 // =================================================================================
 class Rute {
 	// Variabler
+	private int x;
+	private int y;
 	private int verdi;
 
+	private Brett brett;
 	private Rad rad;
 	private Kolonne kolonne;
 	private Boks boks;
 
-	private Rute neste;
+	public Rute neste;
 
 	// Konstruktør
-	Rute(int verdi) {
+	Rute(int verdi, Brett brett) {
 		this.verdi = verdi;
+		this.brett = brett;
+	}
+
+	public void settPos(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	// Fyll ut resten av brettet
 	public void fyllUtRestenAvBrettet() {
-		//System.out.println("D: " + this + " \tN: " + this.neste);
+		this.hentBrett().tomBrett(this);
 
-		for (int i = 1; i <= this.rad.storrelse(); i++) {
-			Rute gjeldende = this;
+		if (this instanceof VariabelRute)
+			for (int verdi : this.finnMuligeVerdier()) {
+				this.settVerdi(verdi);
 
-			while (gjeldende.neste != null) {
-				// Variabel rute
-				if (gjeldende instanceof VariabelRute) {
-					//System.out.println("test" + i);
-
-					if (gjeldende.sjekkFeltVerdier(i)) {
-						// Sett verdi
-						this.settVerdi(i);
-					}
-					else {
-						break;
-					}
-				}
-
-				// Gå til neste
-				gjeldende = gjeldende.neste;
-
-				gjeldende.fyllUtRestenAvBrettet();
+				if (this.neste != null)
+					this.neste.fyllUtRestenAvBrettet();
 			}
 
-			// Siste rute
-			if (gjeldende.neste == null)
-				// Sjekk om ferdigutfylt
-				System.out.println("SISTE RUTE");
-				System.out.println(gjeldende.hentBoks().hentBrett().erUtfylt());
-
-		}
-	}
-	
-	// Fyll ut resten av brettet
-	public void fyllUtRestenAvBrettet2() {
-		System.out.println("D: " + this + " \tN: " + this.neste);
-		
 		if (this instanceof StatiskRute)
 			if (this.neste != null)
 				this.neste.fyllUtRestenAvBrettet();
+
 		
-		if (this instanceof VariabelRute)
-			// Prøv mulig verdier
-			for (int i = 1; i <= this.rad.storrelse(); i++)
-				if (this.sjekkFeltVerdier(i)) {
-					// Sett verdi
-					this.settVerdi(i);
-					
-					if (this.neste != null)
-						this.neste.fyllUtRestenAvBrettet();
-				}
+		// Siste rute
+		if (this.neste == null)
+			if (this.hentBrett().erUtfylt()) {
+				this.hentBrett().hentSpill().hentBeholder().settInn();
+
+				System.out.println(this.hentBrett());
+			}
 	}
 
-	// Sjekk feltverdier
+	// Finn mulige verdier
+	public ArrayList<Integer> finnMuligeVerdier() {
+		ArrayList<Integer> verdier = new ArrayList<Integer>();
+
+		for (int i = 1; i <= this.rad.storrelse(); i++)
+			// Sjekk rad
+			if (!this.rad.inneholderVerdi(i))
+				// Sjekk kolonne
+				if (!this.kolonne.inneholderVerdi(i))
+					// Sjekk boks
+					if (!this.boks.inneholderVerdi(i))
+						verdier.add(i);
+		
+		return verdier;
+	}
+
+	// Sjekk sjekkFeltVerdier 		// TODO: FJERNE??????
 	public boolean sjekkFeltVerdier(int verdi) {
 		// Sjekk rad
 		if (!this.rad.inneholderVerdi(verdi))
@@ -102,9 +97,20 @@ class Rute {
 	public void settBoks(Boks b) {
 		this.boks = b;
 	}
+
+	// Hent forelder-rad
+	public Rad hentRad() {
+		return this.rad;
+	}
+
 	// Hent forelder-boks
 	public Boks hentBoks() {
 		return this.boks;
+	}
+
+	// Hent brett
+	public Brett hentBrett() {
+		return this.brett;
 	}
 
 	// Sett nestepeker
@@ -113,7 +119,7 @@ class Rute {
 	}
 
 	// Sett verdi
-	private void settVerdi(int verdi) {
+	public void settVerdi(int verdi) {				// TODO: PRIVATE
 		this.verdi = verdi;
 	}
 
@@ -128,8 +134,8 @@ class Rute {
 // =================================================================================
 class StatiskRute extends Rute {
 	// Konstruktør
-	StatiskRute(int verdi) {
-		super(verdi);
+	StatiskRute(int verdi, Brett brett) {
+		super(verdi, brett);
 	}
 }
 
@@ -138,7 +144,7 @@ class StatiskRute extends Rute {
 // =================================================================================
 class VariabelRute extends Rute {
 	// Konstruktør
-	VariabelRute() {
-		super(0);
+	VariabelRute(Brett brett) {
+		super(0, brett);
 	}
 }

@@ -4,14 +4,65 @@ class Test {
 		System.out.println("TESTING\n\n\n");
 
 
-		Rute forste = spill.brett.hentForsteRute();
-		Rute siste = spill.brett.hentSisteRute();
+		SudokuBeholder beholder = spill.hentBeholder();
 
-		
+		System.out.println(beholder.hentAntallLosninger());
+
+
+		Rute forste = spill.brett.hentRute(0, 0);
+
+
 		forste.fyllUtRestenAvBrettet();
 
 
+		System.out.println(beholder.hentAntallLosninger());
+
+		/*
+		Rute andre = spill.brett.hentRute(0, 1);
+		Rute tredje = spill.brett.hentRute(1, 1);
+
+
+		forste.settVerdi(2);
+		andre.settVerdi(4);
+		tredje.settVerdi(3);
+
+
+		System.out.print("\n" + forste + " (" + forste.x + "x" + forste.y + "): ");
+
+		for (int v : forste.finnMuligeVerdier())
+			System.out.print(v + ", ");
+
+
+		System.out.print("\n" + andre + " (" + andre.x + "x" + andre.y + "): ");
+
+		for (int v : andre.finnMuligeVerdier())
+			System.out.print(v + ", ");
+
+
+		System.out.print("\n" + tredje + " (" + tredje.x + "x" + tredje.y + "): ");
+
+		for (int v : tredje.finnMuligeVerdier())
+			System.out.print(v + ", ");
+
+
+
 		System.out.println(spill.brett);
+
+		
+
+		System.out.println(spill.brett);
+		*/
+
+		/*		
+		forste.fyllUtRestenAvBrettet();
+
+		//spill.brett.tomBrett(0, 0);
+
+		System.out.println(spill.brett);
+		*/
+
+
+		//System.out.println(spill.brett);
 
 		// TESTING
 		/*

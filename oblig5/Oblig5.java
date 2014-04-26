@@ -18,11 +18,11 @@ class Oblig5 {
 
 		// Kjør program
 		Sudoku spill = new Sudoku(args);
-		spill.finnLosninger();
+		//spill.finnLosninger();
 
 		
 		/* TESTING */
-		Test test = new Test(spill);
+		//Test test = new Test(spill);
 		/* TESTING */
 
 
