@@ -3,166 +3,90 @@ import java.io.*;
 import java.util.ArrayList;
 
 
-class Brett2 {
-	// Variabler
+class Brett {
+	// Størrelse
 	private int boksRader;
 	private int boksKolonner;
 	private int feltStorrelse;
+	private int brettStorrelse;
 
+	// Ruter
 	private Rute[][] ruter;
 
+	// Felter
 	private Boks[] bokser;
 	private Rad[] rader;
 	private Kolonne[] kolonner;
 
+	// Beholder
+	private SudokuBeholder beholder;
+
 	// Konstruktør
-	Brett2(int boksRader, int boksKolonner, ArrayList<Rute> ruter) {
-		// Opprett tomt brett
+	Brett(int boksRader, int boksKolonner, ArrayList<Rute> ruter) {
+		// Beholder
+		this.beholder = new SudokuBeholder();
+
+		// Opprett brett
 		this.boksRader = boksRader;
 		this.boksKolonner = boksKolonner;
 		this.feltStorrelse = (this.boksRader * this.boksKolonner);
-
-		this.ruter = new Rute[this.feltStorrelse][this.feltStorrelse];
-
-		this.bokser = new Boks[this.feltStorrelse];
-		this.rader = new Rad[this.feltStorrelse];
-		this.kolonner = new Kolonne[this.feltStorrelse];
-
-		// Fordel ruter
-		for (int i = 0; i < ruter.size(); i++) {
-			System.out.println(ruter.get(i) + " - " + ruter.get(i).hentVerdi());
-		}
-	}
-
-}
-
-// 	Klasse: Brett
-// =================================================================================
-class Brett implements Cloneable {
-	// Variabler
-	private Sudoku spill;
-
-	private int boksRader;
-	private int boksKolonner;
-	private int feltStorrelse;
-
-	private Rute[][] ruter;
-
-	private Boks[] bokser;
-	private Rad[] rader;
-	private Kolonne[] kolonner;
-
-	private ArrayList<Integer> verdier;
-
-	// Konstruktør
-	Brett(Sudoku spill, int boksRader, int boksKolonner, ArrayList<Integer> verdier) {
-		this.spill = spill;
-
-		// Opprett tomt brett
-		this.boksRader = boksRader;
-		this.boksKolonner = boksKolonner;
-		this.feltStorrelse = (this.boksRader * this.boksKolonner);
-		this.verdier = verdier;
-
-		this.ruter = new Rute[this.feltStorrelse][this.feltStorrelse];
-
-		this.bokser = new Boks[this.feltStorrelse];
-		this.rader = new Rad[this.feltStorrelse];
-		this.kolonner = new Kolonne[this.feltStorrelse];
+		this.brettStorrelse = (this.feltStorrelse * this.feltStorrelse);
 
 		System.out.println("[*] Genrerer " + this.feltStorrelse + "x" + this.feltStorrelse + " brett, med " + this.boksRader + "x" + this.boksKolonner + " bokser...");
 
-		// Fordel verdier
-		this.fordelVerdier();
-	}
+		// Felter
+		this.bokser = new Boks[this.feltStorrelse];
+		this.rader = new Rad[this.feltStorrelse];
+		this.kolonner = new Kolonne[this.feltStorrelse];
 
-	// Fordel verdier
-	private void fordelVerdier() {
-		System.out.println("[*] Fordeler eventuelle forhåndsgitte verdier...");
+		for (int i = 0; i < this.feltStorrelse; i++) {
+			// Felter
+			this.rader[i] = new Rad(this);
+			this.kolonner[i] = new Kolonne(this);
+			this.bokser[i] = new Boks(this, this.boksRader, this.boksKolonner);
+		}
 
-		// Sett ruteverdier
-		int ant, r, k;
-		ant = r = k = 0;
+		// Ruter
+		this.ruter = new Rute[this.feltStorrelse][this.feltStorrelse];
+
+		int b = 0;
+		int h = 0;
 		Rute forrige = null;
 
-		for(int verdi : this.verdier) {
-			// Rute
-			Rute rute;
-
-			if (verdi == 0)
-				rute = new VariabelRute(this);
-			else
-				rute = new StatiskRute(verdi, this);
-
-			// Legg til rute
-			this.ruter[r++][k] = rute;
-
-			// Sett nestepeker
-			if (forrige != null)
-				forrige.settNeste(rute);
-
-			forrige = rute;
-
-			// Ny rad
-			if (++ant%this.feltStorrelse == 0) {
-				r = 0;
-				k++;
-			}
-		}
-
-		// Opprett felter (rader, kolonner, bokser)
-		for (int i = 0; i < this.feltStorrelse; i++) {
-			this.rader[i] = new Rad();
-			this.kolonner[i] = new Kolonne();
-			this.bokser[i] = new Boks(this.boksRader, this.boksKolonner);
-		}
-
-		// Fyll feltruter
-		int h = 0;
-		int bnr = 0;
-
-		for (int i = 0; i < this.feltStorrelse; i++) {
-			for (int j = 0; j < this.feltStorrelse; j++) {
-				this.rader[i].settInnRute(this.ruter[j][i]);
-				this.kolonner[i].settInnRute(this.ruter[i][j]);
-
-				if (j%this.boksKolonner==0) {
+		for (int r = 0; r < this.feltStorrelse; r++) {
+			for (int k = 0; k < this.feltStorrelse; k++) {
+				if (k%this.boksKolonner==0) {
 					if (h++%this.boksRader==0)
-						bnr = 0;
-
-					bnr++;
+						b = 0;
+					b++;
 				}
 
-				this.bokser[(((i+bnr)-(i%this.boksRader))-1)].settInnRute(this.ruter[j][i]);
+				int rNr = ((r * this.feltStorrelse) + k);
+				int bNr = (((r+b)-(r%this.boksRader))-1);
+
+				Rute rute = ruter.get(rNr);
+
+				this.ruter[r][k] = rute;
+				this.rader[r].settInnRute(rute);
+				this.kolonner[k].settInnRute(rute);
+				this.bokser[bNr].settInnRute(rute);
+
+				// Nestepekere
+				if (forrige != null)
+					forrige.neste = rute;
+
+				forrige = rute;
+
+
+				// System.out.print(rNr + " -- " + r + "x" + k + " -- ");
+				// System.out.print("rad = " + r + ", ");
+				// System.out.print("kol = " + k + ", ");
+				// System.out.print("box = " + bNr + ", ");
+				// System.out.println(ruter.get(i) + " - " + ruter.get(i).hentVerdi());
 			}
 		}
 
 		System.out.println(this);
-	}
-
-	// Returner bokser
-	public Boks[] hentBokser() {
-		return this.bokser;
-	}
-
-	// Returner rader
-	public Rad[] hentRader() {
-		return this.rader;
-	}
-
-	// Returner kolonner
-	public Kolonne[] hentKolonner() {
-		return this.kolonner;
-	}
-
-	// Returnerer rute
-	public Rute hentRute(int x, int y) {
-		return this.ruter[x][y];
-	}
-
-	// Returnerer spillobjekt
-	public Sudoku hentSpill() {
-		return this.spill;
 	}
 
 	// Sjekk om komplett
@@ -185,9 +109,40 @@ class Brett implements Cloneable {
 		}
 	}
 
+	// Felter
+	public int hentFeltStorrelse() { return this.feltStorrelse; }
+	public int hentAntallBoksRader() { return this.boksRader; }
+	public int hentAntallBoksKolonner() { return this.boksKolonner; }
+	public Boks[] hentBokser() { return this.bokser; }
+	public Rad[] hentRader() { return this.rader; }
+	public Kolonne[] hentKolonner() { return this.kolonner; }
+
+	// Returnerer ruter
+	public ArrayList<Rute> hentRuter() {
+		ArrayList<Rute> ruter = new ArrayList<Rute>();
+
+		for (int r = 0; r < this.feltStorrelse; r++)
+			for (int k = 0; k < this.feltStorrelse; k++)
+				ruter.add(this.ruter[r][k]);
+
+		return ruter;
+	}
+
+	// Returner beholder
+	public SudokuBeholder hentBeholder() {
+		return this.beholder;
+	}
+
+	// Finn løsninger
+	public void finnLosninger() {
+		// Start i første rute
+		this.ruter[0][0].fyllUtRestenAvBrettet();
+	}
+
+
 	// String-representasjon av brett
 	public String toString() {
-		String cB = "\033[32m";
+		String cB = "\033[91m";
 		String cM = "\033[37m";
 		String cW = "\033[0m";
 
@@ -223,11 +178,5 @@ class Brett implements Cloneable {
 		}
 
 		return brettString;
-	}
-
-
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
 	}
 }

@@ -7,11 +7,13 @@ import java.util.ArrayList;
 // =================================================================================
 class Felt {
 	// Variabler
+	private Brett brett;
 	private ArrayList<Rute> ruter;
 
 	// Konstruktør
-	Felt() {
-		 this.ruter = new ArrayList<Rute>();
+	Felt(Brett brett) {
+		this.brett = brett;
+		this.ruter = new ArrayList<Rute>();
 	}
 
 	// Sett inn rute
@@ -38,11 +40,15 @@ class Felt {
 		return this.ruter.size();
 	}
 
+	public Brett hentBrett() {
+		return this.brett;
+	}
+
 	// String-representasjon
 	public String toString() {
-		String cB = "\033[32m";
+		String cB = "\033[91m";
 		String cM = "\033[37m";
-		String cR = "\033[91m";
+		String cR = "\033[32m";
 		String cW = "\033[0m";
 		String rad = "";
 
@@ -76,6 +82,11 @@ class Felt {
 // 	Klasse: Rad
 // =================================================================================
 class Rad extends Felt {
+	// Konstruktør
+	Rad(Brett brett) {
+		super(brett);
+	}
+
 	// Sett inn rute
 	public void settInnRute(Rute r) {
 		super.leggTilRute(r);
@@ -87,6 +98,11 @@ class Rad extends Felt {
 // 	Klasse: Kolonne
 // =================================================================================
 class Kolonne extends Felt {
+	// Konstruktør
+	Kolonne(Brett brett) {
+		super(brett);
+	}
+
 	// Sett inn rute
 	public void settInnRute(Rute r) {
 		super.leggTilRute(r);
@@ -103,7 +119,9 @@ class Boks extends Felt {
 	int kolonner;
 
 	// Konstruktør
-	Boks(int rader, int kolonner) {
+	Boks(Brett brett, int rader, int kolonner) {
+		super(brett);
+
 		this.rader = rader;
 		this.kolonner = kolonner;
 	}

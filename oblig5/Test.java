@@ -6,11 +6,6 @@ class Test {
 		System.out.println("TESTING\n\n\n");
 
 
-		ArrayList<String> test = new ArrayList<String>(100);
-
-		test.add("hey");
-
-		System.out.println(test.size());
 
 
 		System.out.println("\n\n\n==================================================================");

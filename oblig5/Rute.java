@@ -4,57 +4,110 @@ import java.util.ArrayList;
 
 //	Klasse: Rute
 // =================================================================================
-class Rute {
+abstract class Rute {
 	// Variabler
 	private int verdi;
-
-	private Brett brett;
-	private Rad rad;
-	private Kolonne kolonne;
-	private Boks boks;
+	
+	protected Rad rad;
+	protected Kolonne kolonne;
+	protected Boks boks;
 
 	public Rute neste;
 
 	// Konstruktør
-	Rute(int verdi, Brett brett) {
+	Rute(int verdi) {
 		this.verdi = verdi;
-		this.brett = brett;
+	}
+
+	// Fyll ut resten av brettet
+	protected abstract void fyllUtRestenAvBrettet();
+
+	// Felt
+	public void settRad(Rad r) { this.rad = r; }
+	public void settKolonne(Kolonne k) { this.kolonne = k; }
+	public void settBoks(Boks b) { this.boks = b; }
+
+	public Rad hentRad() { return this.rad; }
+	public Kolonne hentKolonne() { return this.kolonne; }
+	public Boks hentBoks() { return this.boks; }
+
+	// Verdi
+	public void settVerdi(int verdi) { this.verdi = verdi; }
+	public int hentVerdi() { return this.verdi; }
+}
+
+
+// 	Klasse: StatiskRute
+// =================================================================================
+class StatiskRute extends Rute {
+	// Konstruktør
+	StatiskRute(int verdi) {
+		super(verdi);
 	}
 
 	// Fyll ut resten av brettet
 	public void fyllUtRestenAvBrettet() {
-		this.hentBrett().tomBrett(this);
+		// Tøm brett f.o.m. denne ruten
+		this.rad.hentBrett().tomBrett(this);
 
-		if (this instanceof VariabelRute)
-			for (int verdi : this.finnMuligeVerdier()) {
-				this.settVerdi(verdi);
+		// Hopp over
+		if (this.neste != null)
+			this.neste.fyllUtRestenAvBrettet();
 
-				if (this.neste != null)
-					this.neste.fyllUtRestenAvBrettet();
+		// Siste rute
+		if (this.neste == null) {
+			// Brett
+			Brett brett = this.rad.hentBrett();
+
+			// Sjekk om komplett
+			if (brett.erUtfylt()) {
+				// Lagre kopi av løst brett i beholder
+				brett.hentBeholder().settInn(brett);
 			}
+		}
+	}
+}
 
-		if (this instanceof StatiskRute)
+
+// 	Klasse: VariabelRute
+// =================================================================================
+class VariabelRute extends Rute {
+	// Konstruktør
+	VariabelRute() {
+		super(0);
+	}
+	VariabelRute(int verdi) {
+		super(verdi);
+	}
+
+	// Fyll ut resten av brettet
+	public void fyllUtRestenAvBrettet() {
+		// Tøm brett f.o.m. denne ruten
+		this.rad.hentBrett().tomBrett(this);
+
+		// Finn mulige verdier
+		for (int verdi : this.muligeVerdier()) {
+			this.settVerdi(verdi);
+
 			if (this.neste != null)
 				this.neste.fyllUtRestenAvBrettet();
+		}
 
-		
 		// Siste rute
-		if (this.neste == null)
-			// Sjekk om komplett
-			if (this.hentBrett().erUtfylt()) {
-				// Lagre kopi av løst brett i beholder
-				try {
-					Brett losning = (Brett) this.hentBrett().clone();
+		if (this.neste == null) {
+			// Brett
+			Brett brett = this.rad.hentBrett();
 
-					this.hentBrett().hentSpill().hentBeholder().settInn(losning);
-				} catch(CloneNotSupportedException e) {
-					System.out.println("[FEIL] Løsningen ble ikke lagret!");
-				}
+			// Sjekk om komplett
+			if (brett.erUtfylt()) {
+				// Lagre kopi av løst brett i beholder
+				brett.hentBeholder().settInn(brett);
 			}
+		}
 	}
 
 	// Finn mulige verdier i felter
-	public ArrayList<Integer> finnMuligeVerdier() {
+	public ArrayList<Integer> muligeVerdier() {
 		ArrayList<Integer> verdier = new ArrayList<Integer>();
 
 		for (int i = 1; i <= this.rad.storrelse(); i++)
@@ -67,70 +120,5 @@ class Rute {
 						verdier.add(i);
 		
 		return verdier;
-	}
-
-	// Sett forelder-rad
-	public void settRad(Rad r) {
-		this.rad = r;
-	}
-
-	// Sett forelder-kolonne
-	public void settKolonne(Kolonne k) {
-		this.kolonne = k;
-	}
-
-	// Sett forelder-boks
-	public void settBoks(Boks b) {
-		this.boks = b;
-	}
-
-	// Hent forelder-rad
-	public Rad hentRad() {
-		return this.rad;
-	}
-
-	// Hent forelder-boks
-	public Boks hentBoks() {
-		return this.boks;
-	}
-
-	// Hent brett
-	public Brett hentBrett() {
-		return this.brett;
-	}
-
-	// Sett nestepeker
-	public void settNeste(Rute n) {
-		this.neste = n;
-	}
-
-	// Sett verdi
-	public void settVerdi(int verdi) {
-		this.verdi = verdi;
-	}
-
-	// Hent verdi
-	public int hentVerdi() {
-		return this.verdi;
-	}
-}
-
-
-// 	Klasse: StatiskRute
-// =================================================================================
-class StatiskRute extends Rute {
-	// Konstruktør
-	StatiskRute(int verdi, Brett brett) {
-		super(verdi, brett);
-	}
-}
-
-
-// 	Klasse: VariabelRute
-// =================================================================================
-class VariabelRute extends Rute {
-	// Konstruktør
-	VariabelRute(Brett brett) {
-		super(0, brett);
 	}
 }
