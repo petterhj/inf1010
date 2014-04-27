@@ -66,7 +66,7 @@ class Felt {
 			if (r instanceof StatiskRute)
 				rad += cR + v + cW;
 			if (r instanceof VariabelRute) {
-				rad += v;
+				rad += cR + v + cW;
 			}
 			if ((i+1)%r.hentBoks().hentAntallKolonner()==0)
 				rad += cB + " |" + cW;
