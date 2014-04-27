@@ -1,9 +1,9 @@
-// Imports
+// Import
 import java.io.*;
 import java.util.ArrayList;
 
 
-// 	Class: Sudoku
+// 	Klasse: Sudoku
 // =================================================================================
 class Sudoku {
 	// Variabler
@@ -12,6 +12,7 @@ class Sudoku {
 
 	public SudokuBeholder beholder;
 	public Brett brett; 			// TODO: PRIVATE
+	private Brett2 brett2;
 
 	// Konstruktør
 	Sudoku(String[] args) {
@@ -31,18 +32,28 @@ class Sudoku {
 
 			// Les brettet
 			this.lesInnBrett();
+
+			// Finn løsninger
+			this.finnLosninger();
+
+			// Skriv ut første løsning
+			this.skrivLosning();
 		}
 	}
 
 	// Finn losninger
 	public void finnLosninger() {
+		long startTime = System.currentTimeMillis();
+
 		System.out.println("[*] Leter etter løsninger...");
 
-
+		// Start i første rute
 		this.brett.hentRute(0, 0).fyllUtRestenAvBrettet();
 
+		long stopTime = System.currentTimeMillis();
+      	long elapsedTime = (stopTime - startTime);
 
-		System.out.println("[*] Fant totalt " + this.beholder.hentAntallLosninger() + " løsning(er)");
+		System.out.println("[*] Fant totalt " + this.beholder.hentAntallLosninger() + " løsning(er), fullførte på " + elapsedTime + " ms");
 	}
 
 	// Les sudokubrett
@@ -60,6 +71,7 @@ class Sudoku {
             String dataLinje;
             int linjeNr = 0;
             ArrayList<Integer> verdier = new ArrayList<Integer>();
+            ArrayList<Rute> ruter = new ArrayList<Rute>();
 
             while ((dataLinje = data.readLine()) != null) {
             	linjeNr++;
@@ -84,6 +96,11 @@ class Sudoku {
 							catch (NumberFormatException e) {
 								verdi = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(v) + 10);
 							}
+
+							ruter.add(new StatiskRute(verdi, null));
+						}
+						else {
+							ruter.add(new VariabelRute(null));
 						}
 
                 		verdier.add(verdi);
@@ -94,6 +111,7 @@ class Sudoku {
             data.close();
 
             // Brett
+            brett2 = new Brett2(boksRader, boksKolonner, ruter);
             brett = new Brett(this, boksRader, boksKolonner, verdier);
 
         } catch(IOException e) {
@@ -108,9 +126,13 @@ class Sudoku {
 
 	}
 
-	// Skriv løsning (til skjerm)
+	// Skriv første løsning (til skjerm)
 	public void skrivLosning() {
+		if (this.beholder.hentAntallLosninger() > 0) {
+			System.out.println("[*] Skriver første løsning til skjerm...");
 
+			System.out.println(this.beholder.taUt(0));
+		}
 	}
 
 	// Returner beholder

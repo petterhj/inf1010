@@ -1,25 +1,58 @@
-// Imports
+// Import
 import java.io.*;
 import java.util.ArrayList;
 
 
-// 	Class: Brett
-// =================================================================================
-class Brett {
+class Brett2 {
 	// Variabler
-	private Sudoku spill;
-
 	private int boksRader;
 	private int boksKolonner;
-	public int feltStorrelse;						// TODO: PRIVATE
+	private int feltStorrelse;
 
-	public Rute[][] ruter;							// TODO: PRIVATE
+	private Rute[][] ruter;
 
 	private Boks[] bokser;
 	private Rad[] rader;
 	private Kolonne[] kolonner;
 
-	public ArrayList<Integer> verdier; 				// TODO: PRIVATE
+	// Konstruktør
+	Brett2(int boksRader, int boksKolonner, ArrayList<Rute> ruter) {
+		// Opprett tomt brett
+		this.boksRader = boksRader;
+		this.boksKolonner = boksKolonner;
+		this.feltStorrelse = (this.boksRader * this.boksKolonner);
+
+		this.ruter = new Rute[this.feltStorrelse][this.feltStorrelse];
+
+		this.bokser = new Boks[this.feltStorrelse];
+		this.rader = new Rad[this.feltStorrelse];
+		this.kolonner = new Kolonne[this.feltStorrelse];
+
+		// Fordel ruter
+		for (int i = 0; i < ruter.size(); i++) {
+			System.out.println(ruter.get(i) + " - " + ruter.get(i).hentVerdi());
+		}
+	}
+
+}
+
+// 	Klasse: Brett
+// =================================================================================
+class Brett implements Cloneable {
+	// Variabler
+	private Sudoku spill;
+
+	private int boksRader;
+	private int boksKolonner;
+	private int feltStorrelse;
+
+	private Rute[][] ruter;
+
+	private Boks[] bokser;
+	private Rad[] rader;
+	private Kolonne[] kolonner;
+
+	private ArrayList<Integer> verdier;
 
 	// Konstruktør
 	Brett(Sudoku spill, int boksRader, int boksKolonner, ArrayList<Integer> verdier) {
@@ -45,7 +78,7 @@ class Brett {
 
 	// Fordel verdier
 	private void fordelVerdier() {
-		System.out.println("[*] Fordeler forhåndsgitte verdier...");
+		System.out.println("[*] Fordeler eventuelle forhåndsgitte verdier...");
 
 		// Sett ruteverdier
 		int ant, r, k;
@@ -62,9 +95,7 @@ class Brett {
 				rute = new StatiskRute(verdi, this);
 
 			// Legg til rute
-			int asd = r++;
-			rute.settPos(asd, k);
-			this.ruter[asd][k] = rute;
+			this.ruter[r++][k] = rute;
 
 			// Sett nestepeker
 			if (forrige != null)
@@ -79,11 +110,11 @@ class Brett {
 			}
 		}
 
-		// Opprett antall felter (rader, kolonner, bokser)
+		// Opprett felter (rader, kolonner, bokser)
 		for (int i = 0; i < this.feltStorrelse; i++) {
 			this.rader[i] = new Rad();
 			this.kolonner[i] = new Kolonne();
-			this.bokser[i] = new Boks(boksRader, boksKolonner);
+			this.bokser[i] = new Boks(this.boksRader, this.boksKolonner);
 		}
 
 		// Fyll feltruter
@@ -144,7 +175,7 @@ class Brett {
 		return true;
 	}
 
-	// Tøm brett fra koordinat
+	// Tøm brett fra f.o.m. rute
 	public void tomBrett(Rute r) {
 		if (r != null) {
 			if (r instanceof VariabelRute)
@@ -160,7 +191,7 @@ class Brett {
 		String cM = "\033[37m";
 		String cW = "\033[0m";
 
-		String brettString = "";
+		String brettString = "\n";
 		int linjeLengde = (this.feltStorrelse*4);
 
 		brettString += "\t" + cB;
@@ -193,29 +224,10 @@ class Brett {
 
 		return brettString;
 	}
-	/*
-	public String toString() {
-		String brettString = "";
-		String brettLinje = "\t+";
-		int linjeLengde = ((this.feltStorrelse*3) + (this.feltStorrelse/this.boksKolonner) + 1);
-		
-		for (int i = 0; i < this.hentRader().length; i++) {
-			if ((i != 0) && (i%this.boksRader==0)) {
-				brettString += "\t|";
-				for (int j = 0; j < linjeLengde; j++)
-					brettString += " ";
-				brettString += "|\n";
-			}
 
 
-			brettString += "\t|" + this.hentRader()[i] + " |\n";
-		}
-
-		for (int i = 0; i < linjeLengde; i++)
-			brettLinje += "-";
-
-		brettLinje += "+\n";
-
-		return brettLinje + brettString + brettLinje;
-	}*/
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }

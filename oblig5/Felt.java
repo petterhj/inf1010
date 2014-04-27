@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 
-//	Class: Felt
+//	Klasse: Felt
 // =================================================================================
 class Felt {
 	// Variabler
@@ -48,16 +48,20 @@ class Felt {
 
 		for (int i = 0; i < this.hentRuter().size(); i++) {
 			Rute r = this.hentRuter().get(i);
+			String v = " ";
+			if (r.hentVerdi() != 0) {
+				if ((r.hentVerdi() > 0) && (r.hentVerdi() < 10))
+					v = "" + r.hentVerdi();
+				else
+					v = "" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt((r.hentVerdi()-10));
+			}
+
 			rad += " ";
 			if (r instanceof StatiskRute)
-				rad += cR + r.hentVerdi() + cW;
+				rad += cR + v + cW;
 			if (r instanceof VariabelRute) {
-				if (r.hentVerdi() == 0)
-					rad += " ";
-				else
-					rad += r.hentVerdi();
+				rad += v;
 			}
-			//if ((i == (this.hentRuter().size()-1)) || (i%2==0))
 			if ((i+1)%r.hentBoks().hentAntallKolonner()==0)
 				rad += cB + " |" + cW;
 			else
@@ -66,28 +70,10 @@ class Felt {
 
 		return rad;
 	}
-	/*
-	public String toString() {
-		String rep = "";
-
-		for (Rute r : this.hentRuter()) {
-			if (r.hentBoks().hentRuter().indexOf(r)%r.hentBoks().hentAntallKolonner()==0)
-				rep += " ";
-			if (r.hentVerdi() == 0)
-				rep += "   ";
-			else
-				if (r instanceof StatiskRute)
-					rep += " \033[91m" + r.hentVerdi() + "\033[0m ";
-				if (r instanceof VariabelRute)
-					rep += " " + r.hentVerdi() + " |";
-		}
-
-		return rep;
-	}*/
 }
 
 
-// 	Class: Rad
+// 	Klasse: Rad
 // =================================================================================
 class Rad extends Felt {
 	// Sett inn rute
@@ -98,7 +84,7 @@ class Rad extends Felt {
 	}
 }
 
-// 	Class: Kolonne
+// 	Klasse: Kolonne
 // =================================================================================
 class Kolonne extends Felt {
 	// Sett inn rute
@@ -109,7 +95,7 @@ class Kolonne extends Felt {
 	}
 }
 
-// 	Class: Boks
+// 	Klasse: Boks
 // =================================================================================
 class Boks extends Felt {
 	// Variabler

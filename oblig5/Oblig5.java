@@ -1,7 +1,7 @@
 /*
 	Sudoku
 	======================
-	INF1010 - Oblig5
+	INF1010 - v14 - Oblig5
 	petterhj
 */
 
@@ -16,15 +16,11 @@ class Oblig5 {
 		System.out.println(" Oblig5 - SUDOKU");
 		System.out.println("============================================================================\n");
 
-		// Kjør program
+		// Kjør
 		Sudoku spill = new Sudoku(args);
-		//spill.finnLosninger();
 
-		
-		/* TESTING */
-		//Test test = new Test(spill);
-		/* TESTING */
-
+		// Test
+		Test test = new Test(spill);
 
 		// Footer
 		System.out.println("\n============================================================================");

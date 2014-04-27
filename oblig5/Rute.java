@@ -1,13 +1,11 @@
-// Imports
+// Import
 import java.util.ArrayList;
 
 
-//	Class: Rute
+//	Klasse: Rute
 // =================================================================================
 class Rute {
 	// Variabler
-	private int x;
-	private int y;
 	private int verdi;
 
 	private Brett brett;
@@ -21,11 +19,6 @@ class Rute {
 	Rute(int verdi, Brett brett) {
 		this.verdi = verdi;
 		this.brett = brett;
-	}
-
-	public void settPos(int x, int y) {
-		this.x = x;
-		this.y = y;
 	}
 
 	// Fyll ut resten av brettet
@@ -47,14 +40,20 @@ class Rute {
 		
 		// Siste rute
 		if (this.neste == null)
+			// Sjekk om komplett
 			if (this.hentBrett().erUtfylt()) {
-				this.hentBrett().hentSpill().hentBeholder().settInn();
+				// Lagre kopi av løst brett i beholder
+				try {
+					Brett losning = (Brett) this.hentBrett().clone();
 
-				System.out.println(this.hentBrett());
+					this.hentBrett().hentSpill().hentBeholder().settInn(losning);
+				} catch(CloneNotSupportedException e) {
+					System.out.println("[FEIL] Løsningen ble ikke lagret!");
+				}
 			}
 	}
 
-	// Finn mulige verdier
+	// Finn mulige verdier i felter
 	public ArrayList<Integer> finnMuligeVerdier() {
 		ArrayList<Integer> verdier = new ArrayList<Integer>();
 
@@ -68,19 +67,6 @@ class Rute {
 						verdier.add(i);
 		
 		return verdier;
-	}
-
-	// Sjekk sjekkFeltVerdier 		// TODO: FJERNE??????
-	public boolean sjekkFeltVerdier(int verdi) {
-		// Sjekk rad
-		if (!this.rad.inneholderVerdi(verdi))
-			// Sjekk kolonne
-			if (!this.kolonne.inneholderVerdi(verdi))
-				// Sjekk boks
-				if (!this.boks.inneholderVerdi(verdi))
-					return true;
-
-		return false;
 	}
 
 	// Sett forelder-rad
@@ -119,7 +105,7 @@ class Rute {
 	}
 
 	// Sett verdi
-	public void settVerdi(int verdi) {				// TODO: PRIVATE
+	public void settVerdi(int verdi) {
 		this.verdi = verdi;
 	}
 
@@ -130,7 +116,7 @@ class Rute {
 }
 
 
-// 	Class: StatiskRute
+// 	Klasse: StatiskRute
 // =================================================================================
 class StatiskRute extends Rute {
 	// Konstruktør
@@ -140,7 +126,7 @@ class StatiskRute extends Rute {
 }
 
 
-// 	Class: VariabelRute
+// 	Klasse: VariabelRute
 // =================================================================================
 class VariabelRute extends Rute {
 	// Konstruktør
