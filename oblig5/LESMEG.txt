@@ -1,0 +1,6 @@
+Bruk:
+    * java Oblig5                       GUI
+
+    eller
+
+    * java Oblig5 <innfil> [utfil]      Ingen GUI
