@@ -31,7 +31,7 @@ class Sudoku {
 
 		/* TEST */
 
-		GUIBrett gb = new GUIBrett(brett.hentBeholder());
+		GUIBrett gb = new GUIBrett(brett.hentBeholder(), brett.hentFeltStorrelse());
 
 		/* TEST */
 	}

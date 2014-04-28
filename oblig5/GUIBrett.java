@@ -7,15 +7,11 @@ import java.util.ArrayList;
 
 
 
-// 	Klasse: Vindu
+// 	Klasse: GUIBrett
 // =================================================================================
-//class Vindu extends JFrame {
 class GUIBrett extends JFrame {
-
-	int brettStorrelse = 4;
-	int vinduStorrelse = (brettStorrelse * 90);
-
-	GUIBrett(SudokuBeholder beholder) {
+	// Konstruktør
+	GUIBrett(SudokuBeholder beholder, int feltStorrelse) {
 		// Tittel
 		this.setTitle("Oblig5 - Sudoku");
 
@@ -25,7 +21,7 @@ class GUIBrett extends JFrame {
 
 		// Brett
 		JPanel brettPanel = new JPanel();
-		brettPanel.setLayout(new GridLayout(0, this.brettStorrelse));
+		brettPanel.setLayout(new GridLayout(0, feltStorrelse));
 		brettPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		for (Rute r : losning)
@@ -42,7 +38,7 @@ class GUIBrett extends JFrame {
 		knappLosninger.setMargin(new Insets(3, 5, 3, 5));
 		bunnPanel.add(knappLosninger);
 
-		JLabel antallLosninger = new JLabel("Viser løsning 1/288 (viser maks 750)");
+		JLabel antallLosninger = new JLabel("Løsning 1/288 (viser maks 750)");
 		antallLosninger.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		bunnPanel.add(antallLosninger);
 
@@ -52,7 +48,7 @@ class GUIBrett extends JFrame {
 
 
 		// Vis vindu
-		this.setSize(this.vinduStorrelse, (this.vinduStorrelse + 60));
+		this.setSize((feltStorrelse * 45), ((feltStorrelse * 45) + 60));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
