@@ -76,13 +76,6 @@ class Brett {
 					forrige.neste = rute;
 
 				forrige = rute;
-
-
-				// System.out.print(rNr + " -- " + r + "x" + k + " -- ");
-				// System.out.print("rad = " + r + ", ");
-				// System.out.print("kol = " + k + ", ");
-				// System.out.print("box = " + bNr + ", ");
-				// System.out.println(ruter.get(i) + " - " + ruter.get(i).hentVerdi());
 			}
 		}
 
@@ -135,8 +128,20 @@ class Brett {
 
 	// Finn løsninger
 	public void finnLosninger() {
+		long startTime = System.currentTimeMillis();
+
+		System.out.println("[*] Leter etter løsninger...");
+
 		// Start i første rute
 		this.ruter[0][0].fyllUtRestenAvBrettet();
+
+		long stopTime = System.currentTimeMillis();
+      	long elapsedTime = (stopTime - startTime);
+
+      	if (this.hentBeholder().hentAntallLosninger() > 0)
+			System.out.println("\n[*] Fant totalt " + this.hentBeholder().hentAntallLosninger() + " løsning(er) (brukte " + elapsedTime + " ms.)");
+		else
+			System.out.println("[*] Fant ingen løsninger (brukte " + elapsedTime + " ms.)");
 	}
 
 

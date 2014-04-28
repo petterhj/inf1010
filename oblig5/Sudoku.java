@@ -1,43 +1,83 @@
 // Import
 import java.io.*;
 import java.util.ArrayList;
+import java.awt.GraphicsEnvironment;
+import javax.swing.JFileChooser;
 
 
 // 	Klasse: Sudoku
 // =================================================================================
 class Sudoku {
+	// Konstanter
+	private static final boolean HAR_VINDUMILJO = !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless();
+
 	// Variabler
-	private String brettFil;
-	private String losningsFil;
+	private File innFil = null;
+	private File utFil = null;
 
-	private File innFil;
-	private File utFil;
-
-	public Brett brett; 			// TODO: PRIVATE
+	private Brett brett;
 
 	// Konstruktør
-	Sudoku(File innFil, File utFil) {
-		// Filer
-		this.innFil = innFil;
-		this.utFil = utFil;
+	Sudoku() {
+		// Sjekk etter mulighet for GUI
+		if (HAR_VINDUMILJO) {
+			// Brettfil
+			this.innFil = this.visFilVelger();
 
+			if ((this.innFil != null) && (this.innFil.isFile())) {
+				// Les brett
+				this.brett = this.lesInnBrett();
 
-		// Les brettet
-		this.lesInnBrett();
+				if (this.brett != null) {
+					// Finn løsninger
+					this.brett.finnLosninger();
 
-		// Finn løsninger
-		this.finnLosninger();
+					// Løsninger
+					GUIBrett vindu = new GUIBrett(this.brett.hentBeholder(), this.brett.hentFeltStorrelse());
+				}
+			}
+			else {
+				System.out.println("[X] Ingen gyldig brettfil angitt!");
+			}
+		}
+		else {
+			System.out.println("[X] Kan ikke kjøre GUI-versjon: Intent vindusmiljø funnet.");
+		}
+	}
 
+	Sudoku(String innFilnavn, String utFilnavn) {
+		// Brettfil
+		this.innFil = this.finnFil(innFilnavn);
 
-		/* TEST */
+		if ((this.innFil != null) && (this.innFil.isFile())) {
+			// Les brett
+			this.brett = this.lesInnBrett();
 
-		GUIBrett gb = new GUIBrett(brett.hentBeholder(), brett.hentFeltStorrelse());
+			if (this.brett != null) {
+				// Finn løsninger
+				this.brett.finnLosninger();
 
-		/* TEST */
+				// Løsninger
+				if (utFilnavn != null) {
+					this.utFil = this.finnFil(utFilnavn);
+
+					if (this.utFil != null) {
+						// Skriv løsninger til fil
+						this.lagreLosninger();
+					}
+					else {
+						System.out.println("[X] Ingen gyldig løsningsfil angitt!");
+					}
+				}
+			}
+		}
+		else {
+			System.out.println("[X] Ingen gyldig brettfil angitt!");
+		}
 	}
 
 	// Les sudokubrett
-	public void lesInnBrett() {
+	public Brett lesInnBrett() {
 		System.out.println("[*] Leser brettfil: \"" + this.innFil.getName() + "\"");
 
 		int boksRader = 0;
@@ -56,12 +96,26 @@ class Sudoku {
             	linjeNr++;
 
                 // Antall rader i boks
-                if (linjeNr == 1)
-                	boksRader = Integer.parseInt(dataLinje);
+                if (linjeNr == 1) {
+                	try {
+                		boksRader = Integer.parseInt(dataLinje);
+            		}
+            		catch (NumberFormatException e) {
+            			System.out.println("[X] Feil under brettinnlesing: Mulig feil format!");
+            			return null;
+            		}
+        		}
 
                 // Antall kolonner i boks
-                if (linjeNr == 2)
-                	boksKolonner = Integer.parseInt(dataLinje);
+                if (linjeNr == 2) {
+                	try {
+                		boksKolonner = Integer.parseInt(dataLinje);
+            		}
+            		catch (NumberFormatException e) {
+            			System.out.println("[X] Feil under brettinnlesing: Mulig feil format!");
+            			return null;
+            		}
+        		}
 
                 // Verdier
                 if (linjeNr > 2) {
@@ -86,31 +140,38 @@ class Sudoku {
             data.close();
 
             // Brett
-            brett = new Brett(boksRader, boksKolonner, ruter);
+            return new Brett(boksRader, boksKolonner, ruter);
 
         } catch(IOException e) {
-            // Exit
-            System.out.println("[X] Kunne ikke lese brettfilen (" + this.innFil.getName() + ")!\n");
-            System.exit(1);
+            System.out.println("[X] Kunne ikke lese brettfilen!");
+        	return null;
         }
-	}
-
-	// Finn losninger
-	public void finnLosninger() {
-		long startTime = System.currentTimeMillis();
-
-		System.out.println("[*] Leter etter løsninger...");
-
-		this.brett.finnLosninger();
-
-		long stopTime = System.currentTimeMillis();
-      	long elapsedTime = (stopTime - startTime);
-
-		System.out.println("\n[*] Fant totalt " + this.brett.hentBeholder().hentAntallLosninger() + " løsning(er), fullførte på " + elapsedTime + " ms");
 	}
 
 	// Lagre løsninger (til fil)
 	public void lagreLosninger() {
+		System.out.println("SKRIV TIL FIL");
+	}
 
+	// Filvelger
+	public File visFilVelger() {
+		System.out.println("[*] Venter på brettfil...");
+
+		//JFileChooser filVelger = new JFileChooser(new File(new File(".").getCanonicalPath()));
+		JFileChooser filVelger = new JFileChooser();
+
+		if (filVelger.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+			return filVelger.getSelectedFile();
+
+		return null;
+	}
+		
+	// Finn fil
+	public File finnFil(String filnavn) {
+		if ((filnavn != null) || (filnavn == "")) {
+			return new File(filnavn);
+		}
+
+		return null;
 	}
 }

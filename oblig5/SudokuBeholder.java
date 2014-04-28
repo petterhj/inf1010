@@ -5,9 +5,10 @@ import java.util.ArrayList;
 // 	Klasse: SudokuBeholder
 // =================================================================================
 class SudokuBeholder {
-	// Variabler
+	// Konstanter
 	private static final int MAX = 750;
 
+	// Variabler
 	private ArrayList<ArrayList<Rute>> losninger;
 	private int antallLosninger;
 
@@ -19,8 +20,6 @@ class SudokuBeholder {
 	// Sett inn løsning
 	public void settInn(Brett brett) {
 		this.antallLosninger++;
-
-		//System.out.println(brett);
 
 		if (this.losninger.size() < MAX) {
 			// Lagre kopi av ruter

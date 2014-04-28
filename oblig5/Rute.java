@@ -61,7 +61,7 @@ class StatiskRute extends Rute {
 
 			// Sjekk om komplett
 			if (brett.erUtfylt()) {
-				// Lagre kopi av løst brett i beholder
+				// Send brett til beholder
 				brett.hentBeholder().settInn(brett);
 			}
 		}
