@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 //	Klasse: Rute
 // =================================================================================
-abstract class Rute {
+class Rute {
 	// Variabler
 	private int verdi;
 	
@@ -20,7 +20,10 @@ abstract class Rute {
 	}
 
 	// Fyll ut resten av brettet
-	protected abstract void fyllUtRestenAvBrettet();
+	protected void fyllUtRestenAvBrettet() {
+		// Tøm brett f.o.m. denne ruten
+		this.rad.hentBrett().tomBrett(this);
+	}
 
 	// Felt
 	public void settRad(Rad r) { this.rad = r; }
@@ -54,16 +57,8 @@ class StatiskRute extends Rute {
 			this.neste.fyllUtRestenAvBrettet();
 
 		// Siste rute
-		if (this.neste == null) {
-			// Brett
-			Brett brett = this.rad.hentBrett();
-
-			// Sjekk om komplett
-			if (brett.erUtfylt()) {
-				// Legg til løsning
-				brett.hentBeholder().settInn(new Losning(brett.hentFeltStorrelse(), brett.hentRuter()));
-			}
-		}
+		if (this.neste == null)
+			this.rad.hentBrett().sjekkLosning();
 	}
 }
 
@@ -92,16 +87,8 @@ class VariabelRute extends Rute {
 		}
 
 		// Siste rute
-		if (this.neste == null) {
-			// Brett
-			Brett brett = this.rad.hentBrett();
-
-			// Sjekk om komplett
-			if (brett.erUtfylt()) {
-				// Legg til løsning
-				brett.hentBeholder().settInn(new Losning(brett.hentFeltStorrelse(), brett.hentRuter()));
-			}
-		}
+		if (this.neste == null)
+			this.rad.hentBrett().sjekkLosning();
 	}
 
 	// Finn mulige verdier i felter

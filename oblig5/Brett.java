@@ -82,6 +82,13 @@ class Brett {
 		System.out.println(this);
 	}
 
+	// Sjekk løsning
+	public void sjekkLosning() {
+		if (this.erUtfylt())
+			// Legg til løsning
+			this.hentBeholder().settInn(new Losning(this.hentFeltStorrelse(), this.hentRuter()));
+	}
+
 	// Sjekk om komplett
 	public boolean erUtfylt() {
 		for (int i = 0; i < this.feltStorrelse; i++)
