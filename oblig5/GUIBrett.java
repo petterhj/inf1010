@@ -16,7 +16,7 @@ class GUIBrett extends JFrame {
 		this.setTitle("Oblig5 - Sudoku");
 
 		System.out.println(beholder.hentAntallLosninger());
-		ArrayList<Rute> losning = beholder.taUt(0);
+		Losning losning = beholder.taUt(0);
 		System.out.println(losning);
 
 		// Brett
@@ -24,7 +24,7 @@ class GUIBrett extends JFrame {
 		brettPanel.setLayout(new GridLayout(0, feltStorrelse));
 		brettPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		for (Rute r : losning)
+		for (Rute r : losning.hentRuter())
 			brettPanel.add(new GUIRute(r));
 
 

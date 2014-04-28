@@ -11,8 +11,23 @@ class Losning {
 
 	// Konstruktør
 	Losning(int feltStorrelse, ArrayList<Rute> ruter) {
+		// Brettets feltstørrelse
 		this.feltStorrelse = feltStorrelse;
-		this.ruter = ruter;
+		
+		// Lagre kopi av ruter
+		this.ruter = new ArrayList<Rute>();
+
+		for (Rute r : ruter) {
+			if (r instanceof StatiskRute)
+				this.ruter.add(new StatiskRute(r.hentVerdi()));
+			if (r instanceof VariabelRute)
+				this.ruter.add(new VariabelRute(r.hentVerdi()));
+		}
+	}
+
+	// Returner løsningsruter
+	public ArrayList<Rute> hentRuter() {
+		return this.ruter;
 	}
 
 	// String-representasjon

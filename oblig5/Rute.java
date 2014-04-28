@@ -47,8 +47,7 @@ class StatiskRute extends Rute {
 
 	// Fyll ut resten av brettet
 	public void fyllUtRestenAvBrettet() {
-		// Tøm brett f.o.m. denne ruten
-		this.rad.hentBrett().tomBrett(this);
+		super.fyllUtRestenAvBrettet();
 
 		// Hopp over
 		if (this.neste != null)
@@ -61,8 +60,8 @@ class StatiskRute extends Rute {
 
 			// Sjekk om komplett
 			if (brett.erUtfylt()) {
-				// Send brett til beholder
-				brett.hentBeholder().settInn(brett);
+				// Legg til løsning
+				brett.hentBeholder().settInn(new Losning(brett.hentFeltStorrelse(), brett.hentRuter()));
 			}
 		}
 	}
@@ -82,8 +81,7 @@ class VariabelRute extends Rute {
 
 	// Fyll ut resten av brettet
 	public void fyllUtRestenAvBrettet() {
-		// Tøm brett f.o.m. denne ruten
-		this.rad.hentBrett().tomBrett(this);
+		super.fyllUtRestenAvBrettet();
 
 		// Finn mulige verdier
 		for (int verdi : this.muligeVerdier()) {
@@ -100,8 +98,8 @@ class VariabelRute extends Rute {
 
 			// Sjekk om komplett
 			if (brett.erUtfylt()) {
-				// Lagre kopi av løst brett i beholder
-				brett.hentBeholder().settInn(brett);
+				// Legg til løsning
+				brett.hentBeholder().settInn(new Losning(brett.hentFeltStorrelse(), brett.hentRuter()));
 			}
 		}
 	}
