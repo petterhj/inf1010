@@ -50,6 +50,10 @@ class Felt {
 		String cM = "\033[37m";
 		String cR = "\033[32m";
 		String cW = "\033[0m";
+
+		if (System.getProperty("os.name").startsWith("Windows"))
+			cB = cM = cR = cW = "";
+
 		String rad = "";
 
 		for (int i = 0; i < this.hentRuter().size(); i++) {

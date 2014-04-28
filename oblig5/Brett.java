@@ -146,6 +146,9 @@ class Brett {
 		String cM = "\033[37m";
 		String cW = "\033[0m";
 
+		if (System.getProperty("os.name").startsWith("Windows"))
+			cB = cM = cW = "";
+
 		String brettString = "\n";
 		int linjeLengde = (this.feltStorrelse*4);
 

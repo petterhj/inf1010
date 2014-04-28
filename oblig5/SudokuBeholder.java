@@ -60,7 +60,6 @@ class SudokuBeholder {
 
 	// Ta ut løsning
 	public ArrayList<Rute> taUt(int indeks) {
-		//this.antallLosninger--;
 		if (indeks < this.losninger.size())
 			return this.losninger.get(indeks);
 

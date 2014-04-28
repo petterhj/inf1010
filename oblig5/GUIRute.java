@@ -18,9 +18,9 @@ class GUIRute extends JTextField {
 	private static final Border KANTLINJE = BorderFactory.createLineBorder(FARGE_MORK_GRAA, 1);
 
 	// Konstruktør
-	GUIRute(String verdi, int statisk) {
+	GUIRute(Rute rute) {
 		// Verdi
-		super(verdi);
+		super("" + rute.hentVerdi());
 
 		// Egenskaper
 		this.setEditable(false);
@@ -28,12 +28,12 @@ class GUIRute extends JTextField {
 		this.setHorizontalAlignment(JTextField.CENTER);
 		this.setBorder(KANTLINJE);
 
-		if (statisk == 1) {
+		if (rute instanceof StatiskRute) {
 			//this.setBackground(FARGE_LYS_GRAA);
 			this.setBackground(FARGE_HVIT);
 			this.setForeground(FARGE_GRONN);
 		}
-		else {
+		if (rute instanceof VariabelRute) {
 			this.setBackground(FARGE_HVIT);
 			this.setForeground(FARGE_GRAA);
 		}

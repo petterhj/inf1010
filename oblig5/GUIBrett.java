@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.util.ArrayList;
 
 
 
@@ -14,39 +15,22 @@ class GUIBrett extends JFrame {
 	int brettStorrelse = 4;
 	int vinduStorrelse = (brettStorrelse * 90);
 
-	GUIBrett() {
+	GUIBrett(SudokuBeholder beholder) {
 		// Tittel
 		this.setTitle("Oblig5 - Sudoku");
+
+		System.out.println(beholder.hentAntallLosninger());
+		ArrayList<Rute> losning = beholder.taUt(0);
+		System.out.println(losning);
 
 		// Brett
 		JPanel brettPanel = new JPanel();
 		brettPanel.setLayout(new GridLayout(0, this.brettStorrelse));
 		brettPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		/*
-		for (int r = 0; r < this.brettStorrelse; r++) {
-			for (int k = 0; k < this.brettStorrelse; k++) {
-				// Rute
-				brettPanel.add(new GUIRute("1", 0));
-			}
-		}
-		*/
-		brettPanel.add(new GUIRute("1", 0));
-		brettPanel.add(new GUIRute("4", 0));
-		brettPanel.add(new GUIRute("2", 1));
-		brettPanel.add(new GUIRute("1", 0));
-		brettPanel.add(new GUIRute("2", 0));
-		brettPanel.add(new GUIRute("4", 0));
-		brettPanel.add(new GUIRute("2", 1));
-		brettPanel.add(new GUIRute("1", 0));
-		brettPanel.add(new GUIRute("3", 0));
-		brettPanel.add(new GUIRute("4", 0));
-		brettPanel.add(new GUIRute("2", 0));
-		brettPanel.add(new GUIRute("3", 1));
-		brettPanel.add(new GUIRute("1", 0));
-		brettPanel.add(new GUIRute("2", 0));
-		brettPanel.add(new GUIRute("4", 1));
-		brettPanel.add(new GUIRute("3", 0));
+		for (Rute r : losning)
+			brettPanel.add(new GUIRute(r));
+
 
 		// Bunnpanel
 		JPanel bunnPanel = new JPanel();

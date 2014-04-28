@@ -10,33 +10,35 @@ class Sudoku {
 	private String brettFil;
 	private String losningsFil;
 
-	public SudokuBeholder beholder;
+	private File innFil;
+	private File utFil;
+
 	public Brett brett; 			// TODO: PRIVATE
 
 	// Konstruktør
-	Sudoku(String[] args) {
-		// Sjekk argumenter
-		if (args.length == 1)
-			this.brettFil = args[0];
-		if (args.length == 2)
-			this.losningsFil = args[1];
+	Sudoku(File innFil, File utFil) {
+		// Filer
+		this.innFil = innFil;
+		this.utFil = utFil;
 
-		// Sjekk om brettfil er gitt
-		if (this.brettFil == null) {
-			System.out.println("[X] Ingen brettfil angitt, gis med: Oblig5 <brettfil> [løsningsfil]");
-		}
-		else {
-			// Les brettet
-			this.lesInnBrett();
 
-			// Finn løsninger
-			this.finnLosninger();
-		}
+		// Les brettet
+		this.lesInnBrett();
+
+		// Finn løsninger
+		this.finnLosninger();
+
+
+		/* TEST */
+
+		GUIBrett gb = new GUIBrett(brett.hentBeholder());
+
+		/* TEST */
 	}
 
 	// Les sudokubrett
 	public void lesInnBrett() {
-		System.out.println("[*] Leser brettfil: \"" + this.brettFil + "\"");
+		System.out.println("[*] Leser brettfil: \"" + this.innFil.getName() + "\"");
 
 		int boksRader = 0;
 		int boksKolonner = 0;
@@ -44,7 +46,7 @@ class Sudoku {
 		try {
 			System.out.println("[*] Leser inn verdier...");
 
-            BufferedReader data = new BufferedReader(new FileReader(this.brettFil));
+            BufferedReader data = new BufferedReader(new FileReader(this.innFil));
             
             String dataLinje;
             int linjeNr = 0;
@@ -64,16 +66,18 @@ class Sudoku {
                 // Verdier
                 if (linjeNr > 2) {
                 	for (String v : dataLinje.split("")) {
-                		if (!v.equals(".")) {
+                		// Variabel rute
+						if (v.equals(".")) {
+							ruter.add(new VariabelRute());
+						}
+						// Statisk rute
+                		if ((!v.equals(".")) && (!v.equals(""))) {
 	                		try {
 								ruter.add(new StatiskRute(Integer.parseInt(v)));
 							}
 							catch (NumberFormatException e) {
 								ruter.add(new StatiskRute(("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(v) + 10)));
 							}
-						}
-						else {
-							ruter.add(new VariabelRute());
 						}
                 	}
                 }
@@ -86,7 +90,7 @@ class Sudoku {
 
         } catch(IOException e) {
             // Exit
-            System.out.println("[X] Kunne ikke lese datafilen (" + this.brettFil + ")!\n");
+            System.out.println("[X] Kunne ikke lese brettfilen (" + this.innFil.getName() + ")!\n");
             System.exit(1);
         }
 	}
