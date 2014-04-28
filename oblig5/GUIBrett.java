@@ -17,6 +17,7 @@ class GUIBrett extends JFrame {
 
 		System.out.println(beholder.hentAntallLosninger());
 		Losning losning = beholder.taUt(0);
+		ArrayList<Rute> ruter = losning.hentRuter();
 		System.out.println(losning);
 
 		// Brett
@@ -24,8 +25,8 @@ class GUIBrett extends JFrame {
 		brettPanel.setLayout(new GridLayout(0, feltStorrelse));
 		brettPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		for (Rute r : losning.hentRuter())
-			brettPanel.add(new GUIRute(r));
+		for (int i = 0; i < ruter.size(); i++)
+			brettPanel.add(new GUIRute(i, losning.hentBoksRader(), losning.hentBoksKolonner(), ruter.get(i)));
 
 
 		// Bunnpanel

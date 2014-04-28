@@ -86,7 +86,7 @@ class Brett {
 	public void sjekkLosning() {
 		if (this.erUtfylt())
 			// Legg til løsning
-			this.hentBeholder().settInn(new Losning(this.hentFeltStorrelse(), this.hentRuter()));
+			this.hentBeholder().settInn(new Losning(this.hentAntallBoksRader(), this.hentAntallBoksKolonner(), this.hentRuter()));
 	}
 
 	// Sjekk om komplett

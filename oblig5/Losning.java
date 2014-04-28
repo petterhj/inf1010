@@ -6,13 +6,17 @@ import java.util.ArrayList;
 // =================================================================================
 class Losning {
 	// Variabler
+	private int boksRader;
+	private int boksKolonner;
 	private int feltStorrelse;
 	private ArrayList<Rute> ruter;
 
 	// Konstruktør
-	Losning(int feltStorrelse, ArrayList<Rute> ruter) {
-		// Brettets feltstørrelse
-		this.feltStorrelse = feltStorrelse;
+	Losning(int boksRader, int boksKolonner, ArrayList<Rute> ruter) {
+		// Størrelsesverdier
+		this.boksRader = boksRader;
+		this.boksKolonner = boksKolonner;
+		this.feltStorrelse = (this.boksRader * this.boksKolonner);
 		
 		// Lagre kopi av ruter
 		this.ruter = new ArrayList<Rute>();
@@ -28,6 +32,16 @@ class Losning {
 	// Returner løsningsruter
 	public ArrayList<Rute> hentRuter() {
 		return this.ruter;
+	}
+
+	// Returner boksrader
+	public int hentBoksRader() {
+		return this.boksRader;
+	}
+
+	// Returner bokskolonner
+	public int hentBoksKolonner() {
+		return this.boksKolonner;
 	}
 
 	// String-representasjon

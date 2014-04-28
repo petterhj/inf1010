@@ -22,7 +22,8 @@ class Sudoku {
 		// Sjekk etter mulighet for GUI
 		if (HAR_VINDUMILJO) {
 			// Brettfil
-			this.innFil = this.visFilVelger();
+			//this.innFil = this.visFilVelger();				/// TODO
+			this.innFil = new File("oppgaver/fraoppgave.txt");
 
 			if ((this.innFil != null) && (this.innFil.isFile())) {
 				// Les brett
