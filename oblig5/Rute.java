@@ -79,7 +79,7 @@ class VariabelRute extends Rute {
 		super.fyllUtRestenAvBrettet();
 
 		// Finn mulige verdier
-		for (int verdi : this.muligeVerdier()) {
+		for (int verdi : this.finnMuligeVerdier()) {
 			this.settVerdi(verdi);
 
 			if (this.neste != null)
@@ -92,7 +92,7 @@ class VariabelRute extends Rute {
 	}
 
 	// Finn mulige verdier i felter
-	public ArrayList<Integer> muligeVerdier() {
+	public ArrayList<Integer> finnMuligeVerdier() {
 		ArrayList<Integer> verdier = new ArrayList<Integer>();
 
 		for (int i = 1; i <= this.rad.storrelse(); i++)

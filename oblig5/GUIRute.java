@@ -28,9 +28,14 @@ class GUIRute extends JTextField {
 	GUIRute(int indeks, int boksRader, int boksKolonner, Rute rute) {
 		// Verdi
 		int verdi = rute.hentVerdi();
+		String v = "";
 
-		if (verdi != 0)
-			this.setText("" + rute.hentVerdi());
+		if ((verdi > 0) && (verdi < 10))
+			v += verdi;
+		else if (verdi >= 10)
+			v += "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt((verdi-10));
+
+		this.setText(v);
 
 		// Rute
 		this.indeks = indeks;

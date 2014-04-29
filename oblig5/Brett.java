@@ -146,7 +146,7 @@ class Brett {
       	long elapsedTime = (stopTime - startTime);
 
       	if (this.hentBeholder().hentAntallLosninger() > 0)
-			System.out.println("\n[*] Fant totalt " + this.hentBeholder().hentAntallLosninger() + " løsning(er) (brukte " + elapsedTime + " ms.)");
+			System.out.println("[*] Fant totalt " + this.hentBeholder().hentAntallLosninger() + " løsning(er) (brukte " + elapsedTime + " ms.)");
 		else
 			System.out.println("[*] Fant ingen løsninger (brukte " + elapsedTime + " ms.)");
 	}

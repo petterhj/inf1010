@@ -23,7 +23,6 @@ class Sudoku {
 		if (HAR_VINDUMILJO) {
 			// Brettfil
 			this.innFil = this.visFilVelger();
-			//this.innFil = new File("oppgaver/fraoppgave2.txt");	// TEST
 
 			if ((this.innFil != null) && (this.innFil.isFile())) {
 				// Les brett
@@ -69,6 +68,10 @@ class Sudoku {
 					else {
 						System.out.println("[X] Ingen gyldig løsningsfil angitt!");
 					}
+				}
+				else {
+					// Skriv til skjerm
+					this.skrivLosninger();
 				}
 			}
 		}
@@ -149,20 +152,53 @@ class Sudoku {
         }
 	}
 
+	// Skriv løsninger til skjerm
+	public void skrivLosninger() {
+		// Skriv løsning til skjerm
+		System.out.println("[*] Skriver ut løsninger til skjerm (første " + this.brett.hentBeholder().hentMaks() + " vises)...\n");
+
+		int i = 1;
+
+		for (Losning l : this.brett.hentBeholder().hentLosninger())
+			System.out.println("\t" + i++ + ": " + l);
+	}
+
 	// Lagre løsninger (til fil)
 	public void lagreLosninger() {
-		System.out.println("SKRIV TIL FIL");
+		System.out.println("[*] Skriver ut løsninger til fil (maks " + this.brett.hentBeholder().hentMaks() + ")...");
+
+		try {
+            PrintWriter fil = new PrintWriter(new FileWriter(this.utFil));
+            
+            int i = 1;
+
+            for (Losning l : this.brett.hentBeholder().hentLosninger())
+            	fil.println(i++ + ": " + l);
+                
+            fil.close();
+
+            System.out.println("[*] " + i + " løsning(er) skrevet til fil.");
+        } catch (IOException e) {
+            System.out.println("[X] Kunne ikke skrive til fil!");
+        }
 	}
 
 	// Filvelger
 	public File visFilVelger() {
 		System.out.println("[*] Venter på brettfil...");
 
-		//JFileChooser filVelger = new JFileChooser(new File(new File(".").getCanonicalPath()));
-		JFileChooser filVelger = new JFileChooser();
+		JFileChooser filVelger = null;
 
-		if (filVelger.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-			return filVelger.getSelectedFile();
+		try {
+			filVelger = new JFileChooser(new File(new File(".").getCanonicalPath()));
+		}
+		catch (IOException e) {
+			filVelger = new JFileChooser();
+		}
+		finally {
+			if (filVelger.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+				return filVelger.getSelectedFile();
+		}
 
 		return null;
 	}

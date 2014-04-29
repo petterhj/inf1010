@@ -99,6 +99,7 @@ class Rad extends Felt {
 	}
 }
 
+
 // 	Klasse: Kolonne
 // =================================================================================
 class Kolonne extends Felt {
@@ -114,6 +115,7 @@ class Kolonne extends Felt {
 		r.settKolonne(this);
 	}
 }
+
 
 // 	Klasse: Boks
 // =================================================================================

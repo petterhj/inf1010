@@ -35,7 +35,12 @@ class Losning {
 		String lStreng = "";
 
 		for (int i = 0; i < this.ruter.size(); i++) {
-			lStreng += this.ruter.get(i).hentVerdi();
+			Rute r = this.ruter.get(i);
+
+			if ((r.hentVerdi() > 0) && (r.hentVerdi() < 10))
+				lStreng += r.hentVerdi();
+			else
+				lStreng += "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt((r.hentVerdi()-10));
 
 			if((i+1)%this.feltStorrelse==0)
 				lStreng += "//";

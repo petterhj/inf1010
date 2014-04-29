@@ -6,7 +6,7 @@ import java.util.ArrayList;
 // =================================================================================
 class SudokuBeholder {
 	// Konstanter
-	private static final int MAX = 750;
+	private static final int MAKS = 750;
 
 	// Variabler
 	private Losning tomLosning;
@@ -16,23 +16,16 @@ class SudokuBeholder {
 	// Konstruktør	
 	SudokuBeholder(Losning tomLosning) {
 		this.tomLosning = tomLosning;
-		this.losninger = new ArrayList<Losning>(MAX);
+		this.losninger = new ArrayList<Losning>(MAKS);
 	}
 
 	// Sett inn løsning
 	public void settInn(Losning losning) {
 		this.antallLosninger++;
 
-		if (this.losninger.size() < MAX) {
+		if (this.losninger.size() < MAKS) {
 			// Legg til
 			losninger.add(losning);
-
-			// Skriv ut hele brettet ved første løsning
-			// if (this.antallLosninger == 1)
-				// System.out.println(brett);
-
-			// Skriv løsning til skjerm
-			System.out.println("\t" + this.antallLosninger + ": " + losning);
 		}
 	}
 
@@ -47,6 +40,16 @@ class SudokuBeholder {
 	// Returner antall løsninger
 	public int hentAntallLosninger() {
 		return this.antallLosninger;
+	}
+
+	// Returnerer losninger
+	public ArrayList<Losning> hentLosninger() {
+		return this.losninger;
+	}
+
+	// Returnerer maks lagrede løsninger
+	public int hentMaks() {
+		return MAKS;
 	}
 
 	// Returnerer tom losning
