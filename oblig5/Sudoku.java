@@ -177,7 +177,7 @@ class Sudoku {
                 
             fil.close();
 
-            System.out.println("[*] " + i + " løsning(er) skrevet til fil.");
+            System.out.println("[*] " + (i-1) + " løsning(er) skrevet til fil.");
         } catch (IOException e) {
             System.out.println("[X] Kunne ikke skrive til fil!");
         }
