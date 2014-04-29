@@ -6,41 +6,47 @@ import javax.swing.border.Border;
 import java.util.ArrayList;
 
 
-
 // 	Klasse: GUIBrett
 // =================================================================================
 class GUIBrett extends JFrame {
 	// Konstruktør
-	GUIBrett(SudokuBeholder beholder, int feltStorrelse) {
+	GUIBrett(SudokuBeholder beholder, int boksRader, int boksKolonner) {
 		// Tittel
 		this.setTitle("Oblig5 - Sudoku");
 
-		System.out.println(beholder.hentAntallLosninger());
-		Losning losning = beholder.taUt(0);
-		ArrayList<Rute> ruter = losning.hentRuter();
-		System.out.println(losning);
-
 		// Brett
+		int feltStorrelse = (boksRader * boksKolonner);
+
 		JPanel brettPanel = new JPanel();
 		brettPanel.setLayout(new GridLayout(0, feltStorrelse));
 		brettPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
+		// Løsning
+		Losning losning = beholder.taUt(0);
+		
+		// Ruter
+		ArrayList<Rute> ruter = beholder.hentTomLosning().hentRuter();
+
+		if (losning != null)
+			ruter = losning.hentRuter();
+
 		for (int i = 0; i < ruter.size(); i++)
-			brettPanel.add(new GUIRute(i, losning.hentBoksRader(), losning.hentBoksKolonner(), ruter.get(i)));
+			brettPanel.add(new GUIRute(i, boksRader, boksKolonner, ruter.get(i)));
 
 
 		// Bunnpanel
 		JPanel bunnPanel = new JPanel();
-		bunnPanel.setLayout(new BoxLayout(bunnPanel, BoxLayout.LINE_AXIS));
-		bunnPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+		bunnPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 25, 10));
 
 		JButton knappLosninger = new JButton();
 		knappLosninger.setText("Neste løsning");
-		knappLosninger.setMargin(new Insets(3, 5, 3, 5));
+		knappLosninger.setEnabled(false);
 		bunnPanel.add(knappLosninger);
 
-		JLabel antallLosninger = new JLabel("Løsning 1/288 (viser maks 750)");
-		antallLosninger.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		if (beholder.hentAntallLosninger() > 1)
+			knappLosninger.setEnabled(true);
+
+		JLabel antallLosninger = new JLabel("1/" + beholder.hentAntallLosninger() + " (viser maks 750)");
 		bunnPanel.add(antallLosninger);
 
 		Container contentPane = getContentPane();
@@ -49,7 +55,7 @@ class GUIBrett extends JFrame {
 
 
 		// Vis vindu
-		this.setSize((feltStorrelse * 45), ((feltStorrelse * 45) + 60));
+		this.setSize((feltStorrelse * 45), ((feltStorrelse * 45) + 80));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

@@ -9,12 +9,14 @@ class SudokuBeholder {
 	private static final int MAX = 750;
 
 	// Variabler
+	private Losning tomLosning;
 	private ArrayList<Losning> losninger;
 	private int antallLosninger;
 
 	// Konstruktør	
-	SudokuBeholder() {
-		losninger = new ArrayList<Losning>(MAX);
+	SudokuBeholder(Losning tomLosning) {
+		this.tomLosning = tomLosning;
+		this.losninger = new ArrayList<Losning>(MAX);
 	}
 
 	// Sett inn løsning
@@ -45,5 +47,10 @@ class SudokuBeholder {
 	// Returner antall løsninger
 	public int hentAntallLosninger() {
 		return this.antallLosninger;
+	}
+
+	// Returnerer tom losning
+	public Losning hentTomLosning() {
+		return this.tomLosning;
 	}
 }

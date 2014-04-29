@@ -22,8 +22,8 @@ class Sudoku {
 		// Sjekk etter mulighet for GUI
 		if (HAR_VINDUMILJO) {
 			// Brettfil
-			//this.innFil = this.visFilVelger();				/// TODO
-			this.innFil = new File("oppgaver/fraoppgave.txt");
+			this.innFil = this.visFilVelger();
+			//this.innFil = new File("oppgaver/fraoppgave2.txt");	// TEST
 
 			if ((this.innFil != null) && (this.innFil.isFile())) {
 				// Les brett
@@ -34,7 +34,7 @@ class Sudoku {
 					this.brett.finnLosninger();
 
 					// Løsninger
-					GUIBrett vindu = new GUIBrett(this.brett.hentBeholder(), this.brett.hentFeltStorrelse());
+					GUIBrett vindu = new GUIBrett(this.brett.hentBeholder(), this.brett.hentAntallBoksRader(), this.brett.hentAntallBoksKolonner());
 				}
 			}
 			else {

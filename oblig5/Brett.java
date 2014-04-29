@@ -24,7 +24,7 @@ class Brett {
 	// Konstruktør
 	Brett(int boksRader, int boksKolonner, ArrayList<Rute> ruter) {
 		// Beholder
-		this.beholder = new SudokuBeholder();
+		this.beholder = new SudokuBeholder(new Losning(ruter));
 
 		// Opprett brett
 		this.boksRader = boksRader;
@@ -86,7 +86,7 @@ class Brett {
 	public void sjekkLosning() {
 		if (this.erUtfylt())
 			// Legg til løsning
-			this.hentBeholder().settInn(new Losning(this.hentAntallBoksRader(), this.hentAntallBoksKolonner(), this.hentRuter()));
+			this.hentBeholder().settInn(new Losning(this.hentRuter()));
 	}
 
 	// Sjekk om komplett

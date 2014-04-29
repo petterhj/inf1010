@@ -15,6 +15,7 @@ class GUIRute extends JTextField {
 	private static final Color FARGE_MORK_GRAA = new Color(64, 64, 64);
 	private static final Color FARGE_GRAA = new Color(128, 128, 128);
 	private static final Color FARGE_GRONN = new Color(61, 115, 229);
+	private static final Color FARGE_ROD = new Color(255, 63, 95);
 
 	// Variabler
 	private int indeks;
@@ -26,7 +27,10 @@ class GUIRute extends JTextField {
 	// Konstruktør
 	GUIRute(int indeks, int boksRader, int boksKolonner, Rute rute) {
 		// Verdi
-		super("" + rute.hentVerdi());
+		int verdi = rute.hentVerdi();
+
+		if (verdi != 0)
+			this.setText("" + rute.hentVerdi());
 
 		// Rute
 		this.indeks = indeks;
@@ -49,6 +53,11 @@ class GUIRute extends JTextField {
 		if (rute instanceof VariabelRute) {
 			this.setBackground(FARGE_HVIT);
 			this.setForeground(FARGE_GRAA);
+
+			if (verdi == 0) {
+				this.setText(":(");
+				this.setForeground(FARGE_ROD);
+			}
 		}
 	}
 
@@ -57,24 +66,31 @@ class GUIRute extends JTextField {
 		int topp, venstre, bunn, hoyre;
 		topp = venstre = bunn = hoyre = 0;
 
-		if (this.indeks%this.boksStorrelse == 0) {
+		// Vertikale bokslinjer
+		if (this.indeks%this.boksStorrelse == 0)
 			venstre = 2;
-		}
+		else
+			venstre = 1;
 
 		if ((this.indeks+1)%this.boksKolonner == 0)
 			hoyre = 2;
 
 
-		if (this.indeks%((this.boksStorrelse * this.boksRader) + 0) == 0)
+		// Horisontale bokslinjer
+		if ((this.indeks)%(this.boksStorrelse * this.boksRader) == 0)
 			topp = 2;
+		else
+			topp = 1;
 
-		/*
-		for (int i = 0; i < this.boksStorrelse; i++)
-			if (this.indeks%((this.boksStorrelse * this.boksRader) + i) == 0)
+		for (int i = 0; i < this.boksStorrelse; i++) {
+			if ((this.indeks-i)%(this.boksStorrelse * this.boksRader) == 0)
 				topp = 2;
-		*/
-		
 
+			if ((this.indeks != 0) && ((this.indeks)%((this.boksStorrelse * this.boksStorrelse) - (i+1)) == 0))
+				bunn = 2;
+		}
+
+		// Returner kantlinje
 		return BorderFactory.createMatteBorder(topp, venstre, bunn, hoyre, FARGE_MORK_GRAA);
 	}
 }
