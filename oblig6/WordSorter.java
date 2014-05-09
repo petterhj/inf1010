@@ -16,7 +16,8 @@ class WordSorter {
 
 	// Constructor
 	WordSorter(int threadCnt, File inputFile, File outputFile) {
-		this.threadCnt = threadCnt;
+		//this.threadCnt = threadCnt;
+		this.threadCnt = 2;					// TESTING
 		this.inputFile = inputFile;
 		this.outputFile = outputFile;
 
@@ -69,8 +70,21 @@ class WordSorter {
 			System.out.println(" - Trying to sort words using " + this.threadCnt + " thread(s)...");
 
 			// Start threads
-			for (int i = 0; i < this.threadCnt; i++)
-				System.out.println(i + " - THREAD");
+			int lastIndex = 0;
+
+	        for (int i = 0; i < this.threadCnt; i++) {
+	            int n = (this.wordCnt / this.threadCnt);
+
+	            if (i < (this.wordCnt % this.threadCnt))
+	                n++;
+
+	            // Start
+	            System.out.println(i + " - THREAD - fra:" + (lastIndex) + ", til: " + (lastIndex + n));
+	            
+	            new SortThread(this.words, lastIndex, (lastIndex + n)).start();
+
+	            lastIndex = (lastIndex + n);
+        	}
 		}
 		else {
 			System.out.println(" - No words to sort!");
