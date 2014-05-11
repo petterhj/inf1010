@@ -64,6 +64,10 @@ class WordSorter {
     	}
 	}
 
+	synchronized void test(String[] result) {
+		System.out.println(result);
+	}
+
 	// Sort words
 	private void sortWords() {
 		if ((this.words != null) || (this.words.length != 0)) {

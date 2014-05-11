@@ -18,7 +18,8 @@ class SortThread extends Thread {
 
 	// Run
 	public void run() {
-		this.sort(Arrays.copyOfRange(this.words, this.sortFrom, this.sortTo));
+		String[] result = this.sort(Arrays.copyOfRange(this.words, this.sortFrom, this.sortTo));
+
 	}
 
 	// Sort
