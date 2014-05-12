@@ -61,8 +61,5 @@ class Oblig6 {
 				System.out.println(" - Please provide a valid positive integer for argument \"thread count\"!");
 			}
 		}
-
-		// Footer
-		System.out.println("\n========================================================\n");
 	}
 }
