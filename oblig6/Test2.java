@@ -7,6 +7,7 @@ class Sort {
         "Ole", "Per", "Ida",    // 3
         "Tor", "Jon", "Ada",    // 6
         "Åse", "Jan", "Eda",    // 9
+        //"Ine", "Åke", "Ane",    // 12
     };
 
     private long startTime;
@@ -21,7 +22,7 @@ class Sort {
     private int mergeResultCount = 1;
 
     int wo = this.words.length;
-    int th = 3;
+    int th = 4;
 
     int pr = (wo / th);
     int rs = (wo % th); // siste rs tråder får pr+1
@@ -36,10 +37,24 @@ class Sort {
         System.out.println();
         this.startTime = System.currentTimeMillis();
 
-        // this.test(this.wo);
+        int sortFrom = 0;
 
-        //this.new Merger(this.results).start();
+        for (int i = 0; i < this.th; i++) {
+            int words = this.pr;
 
+            if (i < this.rs)
+                words++;
+
+            int sortTo = (sortFrom + words);
+
+            // System.out.println(i + ": f.o.m " + sortFrom + " til " + sortTo + " (" + (sortTo - sortFrom) + ")");
+            this.new SorterThread(sortFrom, sortTo).start();
+
+            sortFrom = sortTo;
+        }
+        
+
+        /*
         if (th == 1) {
             this.new SorterThread(0, 9).start();    // 9
         }
@@ -73,6 +88,7 @@ class Sort {
             this.new SorterThread(7, 8).start();    // 1
             this.new SorterThread(8, 9).start();    // 1
         }
+        */
     }
 
     // Done
