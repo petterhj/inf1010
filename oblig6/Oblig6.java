@@ -37,17 +37,17 @@ class Oblig6 {
 
 			try {
 				// Thread count
-        		threadCnt = Integer.parseInt(args[0]);
+				threadCnt = Integer.parseInt(args[0]);
 
-        		if ((threadCnt >= threadCntMin) && (threadCnt <= threadCntMax))
-        			validThreadCnt = true;
-    		}
-    		catch (NumberFormatException e) {
-    			validThreadCnt = false;
+				if ((threadCnt >= threadCntMin) && (threadCnt <= threadCntMax))
+					validThreadCnt = true;
+			}
+			catch (NumberFormatException e) {
+				validThreadCnt = false;
 			}
 
 			if (validThreadCnt) {
-	    		// Input file
+				// Input file
 				if (input.isFile()) {
 					System.out.println("  > Threads:\t" + args[0]);
 					System.out.println("  > Input:\t" + args[1]);
