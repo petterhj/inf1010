@@ -23,6 +23,7 @@ class WordSorter {
 
 	// Constructor
 	WordSorter(int threadCnt, File inputFile, File outputFile) {
+		// Arguments
 		this.threadCnt = threadCnt;
 		this.inputFile = inputFile;
 		this.outputFile = outputFile;
@@ -121,8 +122,8 @@ class WordSorter {
 			int prThread = (this.wordCnt / this.threadCnt);
 			int carryover = (this.wordCnt % this.threadCnt);
 
-			System.out.println(" - Begun sorting utilizing " + this.threadCnt + " sorting thread(s)...");
-			System.out.println("  > Per thread: " + prThread + " (+1 first " + carryover + " threads)");
+			System.out.println(" - Began sorting utilizing " + this.threadCnt + " sorting thread(s)...");
+			System.out.println("  > Per thread: " + prThread + " (+1 given to " + carryover + " thread(s))");
 
 			int sortFrom = 0;
 
@@ -134,7 +135,6 @@ class WordSorter {
 
 				int sortTo = (sortFrom + words);
 
-				// System.out.println(i + ": f.o.m " + sortFrom + " til " + sortTo + " (" + (sortTo - sortFrom) + ")");
 				this.new SorterThread(sortFrom, sortTo).start();
 
 				sortFrom = sortTo;
@@ -148,20 +148,6 @@ class WordSorter {
 
 	// Received result from thread
 	synchronized void sortResultReceived(String[] result) {
-		/* !!! REMOVE !!! */
-		/* ============================================================= */
-		/*
-		System.out.print("= RSLT " + this.sortResultCount + ":\t");
-
-		for (String w : result)
-			System.out.print(w + ", ");
-
-		System.out.print(" | " + result);
-		System.out.println();
-		*/
-		/* ============================================================= */
-
-
 		// Store odd result temporarily
 		if ((this.sortResultCount % 2) != 0) {
 			this.prevSortResult = result;
@@ -189,20 +175,6 @@ class WordSorter {
 
 	// Received merge result
 	synchronized void mergeResultReceived(String[] result) {
-		/* !!! REMOVE !!! */
-		/* ============================================================= */
-		/*
-		System.out.print("= MRGD " + this.mergeResultCount + ":\t");
-
-		for (String w : result)
-			System.out.print(w + ", ");
-
-		System.out.print(" | " + result);
-		System.out.println();
-		*/
-		/* ============================================================= */
-
-		
 		// Keep merging merged arrays
 		if (this.prevMergeResult == null) {
 			// Store result temporarily
@@ -220,7 +192,6 @@ class WordSorter {
 			this.writeOutput(result);
 		}
 
-
 		// Increase merge counter
 		this.mergeResultCount++;
 	}
@@ -236,13 +207,6 @@ class WordSorter {
 		SorterThread(int sortFrom, int sortTo) {
 			// Range
 			this.range = Arrays.copyOfRange(WordSorter.this.words, sortFrom, sortTo);
-
-			// System.out.print("* SORT:\t\t");
-
-			// for (String w : this.range)
-			//     System.out.print(w + ", ");
-
-			// System.out.println("(" + (sortTo - sortFrom) + ")");
 		}
 
 		// Run
@@ -273,7 +237,7 @@ class WordSorter {
 				}
 			}
 
-			// Return array in alphabetical order
+			// Return array (of equal size) in alphabetical order
 			return range;
 		}
 	}
@@ -291,8 +255,6 @@ class WordSorter {
 			// Arrays to merge
 			this.a1 = a1;
 			this.a2 = a2;
-
-			// System.out.println("* MRGE:\t\t| " + a1 + " (l=" + a1.length + ") + " + a2 + " (l=" + a2.length + ")");
 		}
 
 		// Run
@@ -303,16 +265,23 @@ class WordSorter {
 
 		// Merge two pre-sorted arrays
 		private String[] merge(String[] a1, String[] a2) {
+			/*
+				Merging of two pre-sorted (required) arrays. 
+			*/
+
 			// Result
 			String[] result = new String[(a1.length + a2.length)];
 
-			for (int i = 0, j = 0, k = 0; i < a1.length || j < a2.length; k++){
-				if (j == a2.length || (i != a1.length && a1[i].compareTo(a2[j]) <= 0))
-					result[k] = a1[i++];
-				else
-					result[k] = a2[j++];
+			for (int i = 0, j = 0, l = 0; i < a1.length || j < a2.length; l++){
+				if (j == a2.length || (i != a1.length && a1[i].compareTo(a2[j]) <= 0)) {
+					result[l] = a1[i++];
+				}
+				else {
+					result[l] = a2[j++];
+				}
 			}
 
+			// Return merged (pre-sorted) arrays, in one combined array
 			return result;
 		}
 	}

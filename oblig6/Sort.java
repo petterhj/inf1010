@@ -22,7 +22,7 @@ class Sort {
 		// Arguments
 		if (args.length < 3) {
 			// Usage
-			System.out.println(" - Usage: Oblig6 <thread count> <input file> <output file>");
+			System.out.println(" - Usage: Sort <thread count> <input file> <output file>");
 		}
 		else {
 			// Validate arguments

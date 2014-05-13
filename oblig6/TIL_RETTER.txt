@@ -1,9 +1,90 @@
  Oblig6, v14, petterhj
 -------------------------------------------------
 
+Obs: Det er lagt inn en begrensning i programmet på ant. tråder mellom 1-2000.
+
+Formålet var å implementere en quicksort-algoritme for sortering, der trådene
+ble organisert i et tre, og "laveste" nivå sto for sortering, og fletting
+skjedde på "tilbakeveien". Det ble noe fiklete å få til riktig fordeling av 
+ord, og i det hele tatt en god generering av noe som lignet et "binært tre".
+Hadde en fungerende, som syntes effektiv, men baserte seg på en stadig
+halvvering av antall ord, som ikke ga kontroll over antall ord delegert til
+hver tråd.
+
+Programmet, i endelig versjon, starter trådene idet ordene er innlest i array,
+og for hvert andre resultat som kommer inn, blir disse stadig flettet sammen 
+av nye tråder (parvis og parvis). De fleste flettetråder skjer med i hovedsak
+like store arrayer, men gitt oddetallstråder, er ikke dette alltid tilfellet,
+jmf. "den siste arrayen kan flettes med den som ble laget da du flettet to"
+(fra blog). Dette er desverre ikke optimalt - gir "skjevheter", og et mer eller
+mindre komplett/perfekt binært tree hadde trolig altså vært mer effektivt.
+
+
  1. Parallellitet
 ------------------
+
+Innlesingen av filen er ikke parallellisert, da dette ville ha ført til
+feil rekkefølge på innleste ord. 
+
+Selve sorteringen/flettingen utføres i trådene, som kan kjøres i parallelle løp.
+Synkroniserte metoder tar kun imot resultater av sortering/fletting.
+
+Hvorvidt dette er effektivt, avhenger av antall tråder brukt og antall ord. 
+Flere tråder for et veldig lavt antall ord, f.eks. 15, gir i dette programmet 
+ikke raskere sortering, grunnet overhead. Testresultatene under antyder at,
+med flere ord, får dramatisk forbedring med flere tråder, før man når et 
+"kritisk punkt", og overhead spiller inn igjen.
 
 
  2. Kjøretid
 ------------------
+
+Kjørt noen tester for ulikt antall ord, med ulikt antall tråder for sortering.
+Tall viser ca. tall, da disse varierer noe for hver kjøring.
+
+Testing kjørt på en relativt dårlig spekket VPS:
+Linux 3.5.0-17-generic #28-Ubuntu SMP x86_64 GNU/Linux
+1 Core, 512MB minne, SSD
+
+* Test 1: *15* ord
+>   1:	1-2ms	***
+>   2:	2-3ms
+>   3:	3ms
+>   5:	3-4ms
+>  10:	5-6ms
+
+Med så få ord, gir her flere tråder mer overhead enn innsparing på tid. 
+
+* Test 2: *5163* ord (names.txt)
+>    1:	284-299 ms
+>    2:	175-224 ms
+>    3:	143-163 ms
+>    5:	135-180 ms
+>   10: 88-106 ms
+>   30:	53-72 ms 	***
+>   50: 65-75 ms
+>  100: 87-100 ms
+>  128: 102-111 ms
+>  200: 123-136 ms
+>  300: 173-191 ms
+> 1000: 434-462 ms
+
+Flere tråder gir en klar forbedring mot et lite antall. Ser ut til at omlag 
+20-40 tråder er mest effektivt for sortering av dette antall ord.
+
+* Test 3: *267751* ord (sowpods.txt)
+>    5:	357174-359586 ms
+>   10: 128877-134520 ms
+>   30:	27973-29136 ms
+>   50: 15111-30078 ms
+>  100:	13022-13041 ms
+>  200: 3201-3219 ms
+>  300: 2265-2274 ms
+>  500: 1561-1586 ms
+> 1000: 1225-1336 ms 	***
+> 2000: 1410-1498 ms
+
+Bruk av flere hundre tråder gir her en dramatisk forbedring.
+Hovedgrunnen til dette ligger nok mest sannsynlig i (in)effektiviteten 
+i sorteringsalgoritmen, som altså fungerer mest effektivt på et
+lavt antall array-elementer.
