@@ -29,6 +29,8 @@ class Oblig6 {
 			System.out.println(" - Checking arguments...");
 
 			boolean validThreadCnt = false;
+			int threadCntMin = 1;
+			int threadCntMax = 2000;
 			int threadCnt = 0;
 			File input = new File(args[1]);
 			File output = new File(args[2]);
@@ -37,7 +39,7 @@ class Oblig6 {
 				// Thread count
         		threadCnt = Integer.parseInt(args[0]);
 
-        		if (threadCnt > 0)
+        		if ((threadCnt >= threadCntMin) && (threadCnt <= threadCntMax))
         			validThreadCnt = true;
     		}
     		catch (NumberFormatException e) {
@@ -58,8 +60,10 @@ class Oblig6 {
 					System.out.println(" - Input file not found!");
 			}
 			else {
-				System.out.println(" - Please provide a valid positive integer for argument \"thread count\"!");
+				System.out.println(" - Please provide a valid positive integer between " + threadCntMin + " and " + threadCntMax + " for argument \"thread count\"!");
 			}
 		}
+
+		System.out.println();
 	}
 }

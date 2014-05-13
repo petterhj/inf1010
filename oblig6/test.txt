@@ -4,7 +4,6 @@ Per
 Knut
 Nils
 Ida
-Vera
 Wenche
 Trond
 Arne
@@ -14,3 +13,5 @@ Agnes
 Bente
 Kari
 Bjørn
+Vera
+Kåre
