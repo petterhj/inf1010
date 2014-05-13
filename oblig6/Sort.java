@@ -9,9 +9,9 @@ import java.io.File;
 
 
 
-//	Class: Oblig6
+//	Class: Sort
 // =================================================================================
-class Oblig6 {
+class Sort {
 	// Main
 	public static void main(String[] args) {
 		// Header

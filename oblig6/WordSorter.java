@@ -229,9 +229,12 @@ class WordSorter {
 	//	Class: SorterThread
 	// =============================================================================
 	private class SorterThread extends Thread {
+		// Variables
 		String[] range;
 
+		// Constructor
 		SorterThread(int sortFrom, int sortTo) {
+			// Range
 			this.range = Arrays.copyOfRange(WordSorter.this.words, sortFrom, sortTo);
 
 			// System.out.print("* SORT:\t\t");
@@ -242,23 +245,35 @@ class WordSorter {
 			// System.out.println("(" + (sortTo - sortFrom) + ")");
 		}
 
+		// Run
 		public void run() {
+			// Return result to monitor
 			WordSorter.this.sortResultReceived(this.sort(this.range));
 		}
 
-		// Sort array alphabetically
+		// Sort given array alphabetically
 		private String[] sort(String[] range) {
+			/*
+				Matches selection sort. Not very efficient for larger arrays,
+				but simpler to implement.
+			*/
+
 			// Sort
-			for(int j = 0; j < range.length; j++) {
-				for (int i = (j + 1); i < range.length; i++) {
-					if(range[i].compareTo(range[j]) < 0) {
-						String current = range[j];
-						range[j] = range[i]; 
-						range[i] = current;
+			for (int i = 0; i < range.length; i++) {
+				// Loop through ahead
+				for (int j = (i + 1); j < range.length; j++) {
+					// Checks whether word range[j] comes *before* range[i] alphabetically
+					if (range[j].compareTo(range[i]) < 0) {
+						// Swap places
+						// 	if range[j] before range[i], move range[j] "upwards"
+						String current = range[i];
+						range[i] = range[j]; 
+						range[j] = current;
 					}
 				}
 			}
 
+			// Return array in alphabetical order
 			return range;
 		}
 	}
@@ -267,22 +282,28 @@ class WordSorter {
 	//	Class: MergerThread
 	// =============================================================================
 	private class MergerThread extends Thread {
+		// Variables
 		private String[] a1;
 		private String[] a2;
 
+		// Constructor
 		MergerThread(String[] a1, String[] a2) {
+			// Arrays to merge
 			this.a1 = a1;
 			this.a2 = a2;
 
 			// System.out.println("* MRGE:\t\t| " + a1 + " (l=" + a1.length + ") + " + a2 + " (l=" + a2.length + ")");
 		}
 
+		// Run
 		public void run() {
+			// Return result to monitor
 			WordSorter.this.mergeResultReceived(this.merge(a1, a2));
 		}
 
 		// Merge two pre-sorted arrays
 		private String[] merge(String[] a1, String[] a2) {
+			// Result
 			String[] result = new String[(a1.length + a2.length)];
 
 			for (int i = 0, j = 0, k = 0; i < a1.length || j < a2.length; k++){
